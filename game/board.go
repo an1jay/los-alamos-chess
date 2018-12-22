@@ -62,13 +62,13 @@ func (b *Board) SquareDisplay() {
 // FuncDisplay outputs a string representation given by function f to stdout
 func (b *Board) FuncDisplay(f func(Square) string) {
 	fmt.Printf(
-		" \tA\tB\tC\tD\tE\tF\n"+
-			"6\t%s\t%s\t%s\t%s\t%s\t%s\n"+
-			"5\t%s\t%s\t%s\t%s\t%s\t%s\n"+
-			"4\t%s\t%s\t%s\t%s\t%s\t%s\n"+
-			"3\t%s\t%s\t%s\t%s\t%s\t%s\n"+
-			"2\t%s\t%s\t%s\t%s\t%s\t%s\n"+
-			"1\t%s\t%s\t%s\t%s\t%s\t%s\n",
+		"   A B C D E F\n"+
+			"6. %s %s %s %s %s %s\n"+
+			"5. %s %s %s %s %s %s\n"+
+			"4. %s %s %s %s %s %s\n"+
+			"3. %s %s %s %s %s %s\n"+
+			"2. %s %s %s %s %s %s\n"+
+			"1. %s %s %s %s %s %s\n",
 		f(A6), f(B6), f(C6), f(D6), f(E6), f(F6),
 		f(A5), f(B5), f(C5), f(D5), f(E5), f(F5),
 		f(A4), f(B4), f(C4), f(D4), f(E4), f(F4),
@@ -87,6 +87,7 @@ func BoardFromMap(m map[Square]Piece) *Board {
 		}
 		b.SetBBForPiece(p, BitBoardFromMap(pMap))
 	}
+	b.UpdateConvenienceBBs()
 	return &b
 }
 
@@ -162,6 +163,15 @@ func (b *Board) SetBBForPiece(p Piece, bb BitBoard) {
 	}
 }
 
+// PieceOccupancy returns a bitboards of the pieces of a certain color.
+// *Call UpdateConvenienceBoards() before using this*
+func (b *Board) PieceOccupancy(c Color) BitBoard {
+	if c == White {
+		return b.wPieces
+	}
+	return b.bPieces
+}
+
 // UpdateConvenienceBBs updates the wPieces, bPieces and emptySqs bitboards
 func (b *Board) UpdateConvenienceBBs() {
 	b.bPieces = b.bKing | b.bQueen | b.bRooks | b.bKnights | b.bPawns
@@ -199,26 +209,49 @@ func (b *Board) Move(source, destination Square, promotionPiece Piece) bool {
 	return true
 }
 
-// AttackVector attack vector returns a bitboard with the attacked squares highlighted.
-func (b *Board) AttackVector(p Piece, sq Square) BitBoard {
+//--------------------------------------------------------------------------------
+
+// MovesVector returns a bitboard with the possible move destination squares highlighted for the piece at the square.
+func (b *Board) MovesVector(sq Square) BitBoard {
+	// need to update covenience bitboards
 	b.UpdateConvenienceBBs()
 
-	panic("Todo")
+	// calculate things which will be useful
+	p := b.Piece(sq)
+	pt := p.PieceType()
+	color := p.Color()
+	sqbb := sq.BitBoard()
+	sqint := int(sq)
+	occupied := ^b.emptySqs
+
+	// switch on piecetype
+	switch pt {
+	case King:
+		return BBKingMoves[sqint] &^ b.PieceOccupancy(color)
+	case Queen:
+		rookAtk := (CalcLinearAttack(occupied, sq.FileBB(), sqbb) ^ CalcLinearAttack(occupied, sq.RankBB(), sqbb))
+		bishAtk := (CalcLinearAttack(occupied, BBDiagonals[sqint], sqbb) ^ CalcLinearAttack(occupied, BBAntiDiagonals[sqint], sqbb))
+		return (rookAtk ^ bishAtk) &^ b.PieceOccupancy(color)
+	case Rook:
+		return (CalcLinearAttack(occupied, sq.FileBB(), sqbb) ^ CalcLinearAttack(occupied, sq.RankBB(), sqbb)) &^ b.PieceOccupancy(color)
+	case Knight:
+		return BBKnightMoves[sqint] &^ b.PieceOccupancy(color)
+	case Pawn:
+		lm := BitBoard(0)
+		if color == White {
+			lm = BBWhitePawnPushes[sqint] & b.emptySqs
+			return lm ^ (BBWhitePawnCaptures[sqint] & b.bPieces)
+		}
+		lm = BBBlackPawnPushes[sqint] & b.emptySqs
+		return lm ^ (BBBlackPawnCaptures[sqint] & b.wPieces)
+	}
+
+	// If no piece at that square, no moves are possible
 	return BitBoard(0)
 }
 
 // CalcLinearAttack calculates attacks for a sliding piece located at PiecePos, which can legally move to pieceMoves, and is blocked by occupied
 func CalcLinearAttack(occupied, pieceMoves, piecePos BitBoard) BitBoard {
 	OccupiedInMask := occupied & pieceMoves
-	return ((OccupiedInMask - 2*piecePos) ^ (OccupiedInMask.Reverse() - 2*piecePos.Reverse()).Reverse()) & pieceMoves //& bbMask
-}
-
-// RookAttacks returns the moves of a rook located at sq
-func RookAttacks(sq Square, occupied BitBoard) BitBoard {
-	return CalcLinearAttack(occupied, sq.FileBB(), sq.BitBoard()) ^ CalcLinearAttack(occupied, sq.RankBB(), sq.BitBoard())
-}
-
-// BishopAttacks returns the moves of a rook located at sq
-func BishopAttacks(sq Square, occupied BitBoard) BitBoard {
-	return CalcLinearAttack(occupied, BBDiagonals[int(sq)], sq.BitBoard()) ^ CalcLinearAttack(occupied, BBAntiDiagonals[int(sq)], sq.BitBoard())
+	return ((OccupiedInMask - 2*piecePos) ^ (OccupiedInMask.Reverse() - 2*piecePos.Reverse()).Reverse()) & pieceMoves
 }

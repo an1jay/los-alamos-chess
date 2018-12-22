@@ -11,37 +11,19 @@ import (
 func main() {
 	// testBoardMove()
 	// timeBBReverse()
-	testBishopAttacks()
+	testMovesVector()
 }
 
-func testRookAttacks() {
-	sq := game.C5
-	posbb := game.BitBoard(0).SetSquareOnBB(sq, true)
-	occbb := game.BitBoard(0).SetSquareOnBB(game.B5, true).SetSquareOnBB(game.E5, true).SetSquareOnBB(game.C3, true)
-	// alllm := game.BBRookMoves[int(sq)]
-	lm := game.RookAttacks(sq, occbb)
-
-	fmt.Println("Piece Position")
-	posbb.Display()
-	fmt.Println("Occupancy")
-	occbb.Display()
-	fmt.Println("Legal Moves")
-	lm.Display()
-}
-
-func testBishopAttacks() {
-	sq := game.C5
-	posbb := game.BitBoard(0).SetSquareOnBB(sq, true)
-	occbb := game.BitBoard(0).SetSquareOnBB(game.B4, true).SetSquareOnBB(game.E3, true).SetSquareOnBB(game.D6, true)
-	// alllm := game.BBRookMoves[int(sq)]
-	lm := game.BishopAttacks(sq, occbb)
-
-	fmt.Println("Piece Position")
-	posbb.Display()
-	fmt.Println("Occupancy")
-	occbb.Display()
-	fmt.Println("Legal Moves")
-	lm.Display()
+func testMovesVector() {
+	b := game.BoardFromMap(InterestingPos)
+	for sq := 0; sq < game.NumSquaresInBoard; sq++ {
+		fmt.Println("Square ", game.Square(sq))
+		fmt.Println("")
+		b.Display(false)
+		fmt.Println("")
+		b.MovesVector(game.Square(sq)).Display()
+		fmt.Println("++++++++++++++++++++++++++++++++++++")
+	}
 }
 
 func testGeneratedBBs() {

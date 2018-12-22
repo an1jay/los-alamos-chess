@@ -39,6 +39,6 @@ func (pos *Position) LegalMove(p *Ply) bool {
 	// Check destination square is empty if capture is true
 	legal = legal && pos.Bd.Piece(p.DestinationSq) == NoPiece
 	// Check if the piece can actually move there
-	legal = legal && pos.Bd.AttackVector(pos.Bd.Piece(p.SourceSq), p.SourceSq)&BitBoard(0).SetSquareOnBB(p.DestinationSq, true) != 0
+	legal = legal && pos.Bd.MovesVector(p.SourceSq)&BitBoard(0).SetSquareOnBB(p.DestinationSq, true) != 0
 	return legal
 }

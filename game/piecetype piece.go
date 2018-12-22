@@ -59,6 +59,34 @@ func (p Piece) PieceType() PieceType {
 	return NoPieceType
 }
 
+// String gets a string representation
+func (p Piece) String() string {
+	switch p {
+	case WhitePawn:
+		return "White Pawn"
+	case WhiteKnight:
+		return "White Knight"
+	case WhiteRook:
+		return "White Rook"
+	case WhiteQueen:
+		return "White Queen"
+	case WhiteKing:
+		return "White King"
+
+	case BlackPawn:
+		return "Black Pawn"
+	case BlackKnight:
+		return "Black Knight"
+	case BlackRook:
+		return "Black Rook"
+	case BlackQueen:
+		return "Black Queen"
+	case BlackKing:
+		return "Black King"
+	}
+	return "NoPieceType"
+}
+
 // Color gets the Color
 func (p Piece) Color() Color {
 	switch p {
