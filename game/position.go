@@ -33,18 +33,12 @@ func (pos *Position) Move(p *Ply, c Color) bool {
 
 // LegalMove returns whether a move is legal.
 func (pos *Position) LegalMove(p *Ply) bool {
+	legal := true
 	// Check side to move
-	if p.Side != pos.Turn {
-		return false
-	}
+	legal = legal && p.Side == pos.Turn
 	// Check destination square is empty if capture is true
-	if p.Capture {
-		return pos.Bd.Piece(p.DestinationSq) == NoPiece
-	}
+	legal = legal && pos.Bd.Piece(p.DestinationSq) == NoPiece
 	// Check if the piece can actually move there
-	piece := pos.Bd.Piece(p.SourceSq)
-
-	return true
+	legal = legal && pos.Bd.AttackVector(pos.Bd.Piece(p.SourceSq), p.SourceSq)&BitBoard(0).SetSquareOnBB(p.DestinationSq, true) != 0
+	return legal
 }
-
-func (pos *Position)

@@ -39,7 +39,7 @@ func (b BitBoard) Mapping() map[Square]bool {
 	return m
 }
 
-// SetSquareOnBB  returns a bitboard with the specific square set to 1 or 0 (true or false).
+// SetSquareOnBB returns a bitboard with the specific square set to 1 or 0 (true or false).
 func (b BitBoard) SetSquareOnBB(sq Square, value bool) BitBoard {
 	if value {
 		return b | BitBoard(1<<uint(sq))
@@ -50,6 +50,11 @@ func (b BitBoard) SetSquareOnBB(sq Square, value bool) BitBoard {
 // Occupied returns true if the square's bitboard position is 1.
 func (b BitBoard) Occupied(sq Square) bool {
 	return (uint64(b) >> uint64(sq) & 1) == 1
+}
+
+// Reverse returns a reversed version of the bitboard - useful in calculating legal moves
+func (b BitBoard) Reverse() BitBoard {
+	return BitBoard(bits.Reverse64(uint64(b)) >> 28)
 }
 
 // String returns a 36 character string of 1s and 0s starting with most significant bit.
@@ -84,30 +89,35 @@ func (b BitBoard) Display() {
 //--------------------------------------------------------------------------------
 
 const (
-	// Equal to 0000000000000000000000000000111111111111111111111111111111111111
-	bbMask BitBoard = 68719476735
+	// BBMask is equal to 0000000000000000000000000000111111111111111111111111111111111111
+	BBMask BitBoard = 68719476735
 
-	// Used to check whether a bitboard is valid
+	// BBValidityCheck is used to check whether a bitboard is valid
 	// Any bitboard b is only valid iff b & validBBCheck == 0
 	// Equal to 1111111111111111111111111111000000000000000000000000000000000000
-	bbValidityCheck BitBoard = 18446744004990074880
+	BBValidityCheck BitBoard = 18446744004990074880
+)
 
-	// Bitboards for each file
-	bbFileA BitBoard = 1090785345
-	bbFileB BitBoard = 2181570690
-	bbFileC BitBoard = 4363141380
-	bbFileD BitBoard = 8726282760
-	bbFileE BitBoard = 17452565520
-	bbFileF BitBoard = 34905131040
+// Bitboards for each file
+const (
+	BBFileA BitBoard = 1090785345
+	BBFileB BitBoard = 2181570690
+	BBFileC BitBoard = 4363141380
+	BBFileD BitBoard = 8726282760
+	BBFileE BitBoard = 17452565520
+	BBFileF BitBoard = 34905131040
+)
 
-	// Bitboards for each rank
-	bbRank1 BitBoard = 63
-	bbRank2 BitBoard = 4032
-	bbRank3 BitBoard = 258048
-	bbRank4 BitBoard = 16515072
-	bbRank5 BitBoard = 1056964608
-	bbRank6 BitBoard = 67645734912
-
+// Bitboards for each rank
+const (
+	BBRank1 BitBoard = 63
+	BBRank2 BitBoard = 4032
+	BBRank3 BitBoard = 258048
+	BBRank4 BitBoard = 16515072
+	BBRank5 BitBoard = 1056964608
+	BBRank6 BitBoard = 67645734912
+)
+const (
 	// NumSquaresInBoard is 36, the number of squares on the board
 	NumSquaresInBoard int = 36
 	// NumSquaresInRow is 6, the number of squares in a row
@@ -125,9 +135,9 @@ var (
 		A6: false, B6: false, C6: false, D6: false, E6: false, F6: false,
 	}
 
-	// bbFiles is an array of bitboards for each file
-	bbFiles = [6]BitBoard{bbFileA, bbFileB, bbFileC, bbFileD, bbFileE, bbFileF}
+	// BBFiles is an array of bitboards for each file
+	BBFiles = [6]BitBoard{BBFileA, BBFileB, BBFileC, BBFileD, BBFileE, BBFileF}
 
-	// bbRanks is an array of bitboards for each rank
-	bbRanks = [6]BitBoard{bbRank1, bbRank2, bbRank3, bbRank4, bbRank5, bbRank6}
+	// BBRanks is an array of bitboards for each rank
+	BBRanks = [6]BitBoard{BBRank1, BBRank2, BBRank3, BBRank4, BBRank5, BBRank6}
 )

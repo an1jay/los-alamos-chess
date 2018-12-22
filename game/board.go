@@ -51,16 +51,16 @@ func (b *Board) Display(symb bool) {
 	if symb {
 		m = PieceSymbMap
 	}
-	b.funcDisplay(func(sq Square) string { return m[b.Piece(sq)] })
+	b.FuncDisplay(func(sq Square) string { return m[b.Piece(sq)] })
 }
 
-// sqDisplay prints the squares in their positions
-func (b *Board) sqDisplay() {
-	b.funcDisplay(func(sq Square) string { return sq.String() })
+// SquareDisplay prints the squares in their positions
+func (b *Board) SquareDisplay() {
+	b.FuncDisplay(func(sq Square) string { return sq.String() })
 }
 
-// funcDisplay outputs a string representation given by function f to stdout
-func (b *Board) funcDisplay(f func(Square) string) {
+// FuncDisplay outputs a string representation given by function f to stdout
+func (b *Board) FuncDisplay(f func(Square) string) {
 	fmt.Printf(
 		" \tA\tB\tC\tD\tE\tF\n"+
 			"6\t%s\t%s\t%s\t%s\t%s\t%s\n"+
@@ -94,7 +94,7 @@ func BoardFromMap(m map[Square]Piece) *Board {
 func (b *Board) CheckBBsAreValid() bool {
 	rv := true
 	for _, p := range AllPieces {
-		rv = rv && b.BitBoardForPiece(p)&bbValidityCheck == 0
+		rv = rv && b.BitBoardForPiece(p)&BBValidityCheck == 0
 	}
 	return rv
 }
@@ -162,6 +162,7 @@ func (b *Board) SetBBForPiece(p Piece, bb BitBoard) {
 	}
 }
 
+// UpdateConvenienceBBs updates the wPieces, bPieces and emptySqs bitboards
 func (b *Board) UpdateConvenienceBBs() {
 	b.bPieces = b.bKing | b.bQueen | b.bRooks | b.bKnights | b.bPawns
 	b.wPieces = b.wKing | b.wQueen | b.wRooks | b.wKnights | b.wPawns
@@ -196,4 +197,28 @@ func (b *Board) Move(source, destination Square, promotionPiece Piece) bool {
 	}
 
 	return true
+}
+
+// AttackVector attack vector returns a bitboard with the attacked squares highlighted.
+func (b *Board) AttackVector(p Piece, sq Square) BitBoard {
+	b.UpdateConvenienceBBs()
+
+	panic("Todo")
+	return BitBoard(0)
+}
+
+// CalcLinearAttack calculates attacks for a sliding piece located at PiecePos, which can legally move to pieceMoves, and is blocked by occupied
+func CalcLinearAttack(occupied, pieceMoves, piecePos BitBoard) BitBoard {
+	OccupiedInMask := occupied & pieceMoves
+	return ((OccupiedInMask - 2*piecePos) ^ (OccupiedInMask.Reverse() - 2*piecePos.Reverse()).Reverse()) & pieceMoves //& bbMask
+}
+
+// RookAttacks returns the moves of a rook located at sq
+func RookAttacks(sq Square, occupied BitBoard) BitBoard {
+	return CalcLinearAttack(occupied, sq.FileBB(), sq.BitBoard()) ^ CalcLinearAttack(occupied, sq.RankBB(), sq.BitBoard())
+}
+
+// BishopAttacks returns the moves of a rook located at sq
+func BishopAttacks(sq Square, occupied BitBoard) BitBoard {
+	return CalcLinearAttack(occupied, BBDiagonals[int(sq)], sq.BitBoard()) ^ CalcLinearAttack(occupied, BBAntiDiagonals[int(sq)], sq.BitBoard())
 }

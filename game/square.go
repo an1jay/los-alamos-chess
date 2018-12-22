@@ -18,6 +18,11 @@ func (sq Square) File() File {
 	return File(int(sq) % numSquaresInRow)
 }
 
+// BitBoard returns a blank bitboard with the square = 1
+func (sq Square) BitBoard() BitBoard {
+	return BitBoard(1 << uint8(sq))
+}
+
 // Color gets the color of the square
 func (sq Square) Color() Color {
 	if ((sq / 6) % 2) == (sq % 2) {
@@ -39,12 +44,12 @@ func GetSquare(f File, r Rank) Square {
 
 // RankBB returns a bitboard for the rank of the square
 func (sq Square) RankBB() BitBoard {
-	return bbRanks[sq.Rank()]
+	return BBRanks[sq.Rank()]
 }
 
 // FileBB returns a bitboard for the file of the square
 func (sq Square) FileBB() BitBoard {
-	return bbFiles[sq.File()]
+	return BBFiles[sq.File()]
 }
 
 //--------------------------------------------------------------------------------
