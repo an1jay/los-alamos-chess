@@ -22,5 +22,5 @@ type Ply struct {
 // String provides a string representation of the Ply - Source Square, Destination Square, Promotion.
 // Implements the fmt.Stringer interface.
 func (p *Ply) String() string {
-	return p.SourceSq.String() + p.DestinationSq.String() + p.Promotion.String()
+	return p.SourceSq.String() + p.DestinationSq.String() + "=" + p.Promotion.String()
 }

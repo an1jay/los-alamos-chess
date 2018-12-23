@@ -159,7 +159,7 @@ func (b *Board) SetBBForPiece(p Piece, bb BitBoard) {
 	case BlackKing:
 		b.bKing = bb
 	default:
-		panic("Board.setBBForPiece() -> Invalid Piece")
+		panic("Board.SetBBForPiece() -> Invalid Piece")
 	}
 }
 
@@ -180,13 +180,13 @@ func (b *Board) UpdateConvenienceBBs() {
 }
 
 // Move simply puts a move on the board - does not perform legality check (will simply make the move if an illegal move is entered).
-func (b *Board) Move(source, destination Square, promotionPiece Piece) bool {
+func (b *Board) Move(source, destination Square, promotionPiece Piece) {
 	movePiece := b.Piece(source)
 	capturePiece := b.Piece(destination)
-	if movePiece == NoPiece {
-		fmt.Println("Board.Move: trying to move NoPiece")
-		return false
-	}
+	// if movePiece == NoPiece {
+	// 	fmt.Println("Board.Move: trying to move NoPiece")
+	// 	return false
+	// }
 
 	// set bitboard for movePiece at source square zero
 	b.SetBBForPiece(movePiece, b.BitBoardForPiece(movePiece).SetSquareOnBB(source, false))
@@ -205,8 +205,26 @@ func (b *Board) Move(source, destination Square, promotionPiece Piece) bool {
 	} else {
 		b.SetBBForPiece(promotionPiece, b.BitBoardForPiece(promotionPiece).SetSquareOnBB(destination, true))
 	}
+}
 
-	return true
+// Copy returns a pointer to the copy of a board
+func (b *Board) Copy() *Board {
+	newb := Board{
+		wPawns:   b.wPawns,
+		wKnights: b.wKnights,
+		wRooks:   b.wRooks,
+		wQueen:   b.wQueen,
+		wKing:    b.wKing,
+		bPawns:   b.bPawns,
+		bKnights: b.bKnights,
+		bRooks:   b.bRooks,
+		bQueen:   b.bQueen,
+		bKing:    b.bKing,
+		bPieces:  b.bPieces,
+		wPieces:  b.wPieces,
+		emptySqs: b.emptySqs,
+	}
+	return &newb
 }
 
 //--------------------------------------------------------------------------------
@@ -254,4 +272,42 @@ func (b *Board) MovesVector(sq Square) BitBoard {
 func CalcLinearAttack(occupied, pieceMoves, piecePos BitBoard) BitBoard {
 	OccupiedInMask := occupied & pieceMoves
 	return ((OccupiedInMask - 2*piecePos) ^ (OccupiedInMask.Reverse() - 2*piecePos.Reverse()).Reverse()) & pieceMoves
+}
+
+// KingSquare returns the square of the king of the color c
+func (b *Board) KingSquare(c Color) Square {
+	if c == White {
+		for sq := 0; sq < NumSquaresInBoard; sq++ {
+			if Square(sq).BitBoard() == b.wKing {
+				return Square(sq)
+			}
+		}
+	}
+	for sq := 0; sq < NumSquaresInBoard; sq++ {
+		if Square(sq).BitBoard() == b.bKing {
+			return Square(sq)
+		}
+	}
+	panic("No King on board")
+}
+
+// SquareAttacked checks whether sq is attacked by the side attacker
+func (b *Board) SquareAttacked(attackSq Square, attacker Color) bool {
+	attackVector := BitBoard(0)
+	pieces := b.PieceOccupancy(attacker)
+	for sq := 0; sq < numSquaresInBoard; sq++ {
+		if pieces.Occupied(Square(sq)) {
+			attackVector = attackVector | b.MovesVector(Square(sq))
+		}
+	}
+	if attackVector.Occupied(attackSq) {
+		return true
+	}
+	return false
+}
+
+// InCheck checks whether King sq is attacked
+func (b *Board) InCheck(c Color) bool {
+	KingSq := b.KingSquare(c)
+	return b.SquareAttacked(KingSq, c.Other())
 }

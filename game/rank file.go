@@ -1,25 +1,5 @@
 package game
 
-// Color is one of the two colors that squares and peices can be - Black and White
-type Color int8
-
-// Enumerating all possible colors.
-const (
-	Black Color = iota
-	White
-	NoColor
-)
-
-// Other returns the opposite color
-func (c Color) Other() Color {
-	if c == Black {
-		return White
-	}
-	return Black
-}
-
-//--------------------------------------------------------------------------------
-
 // File is one of the 6 columns of the board (e.g. the 'a' File)
 type File int8
 

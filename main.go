@@ -11,11 +11,72 @@ import (
 func main() {
 	// testBoardMove()
 	// timeBBReverse()
-	testMovesVector()
+	testMove()
 }
 
+func testMove() {
+	b := game.BoardFromMap(NewGame)
+	pos := game.NewPosition(b, game.White, 0, 0, false)
+
+	fmt.Println("New Game pos")
+	pos.Display(false)
+	fmt.Println("Pseudo Legal ", pos.GeneratePseudoLegalMoves())
+	fmt.Println("Legal ------ ", pos.GenerateLegalMoves())
+
+	fmt.Println(pos.Move(&game.Ply{
+		SourceSq:      game.D2,
+		DestinationSq: game.D3,
+		Promotion:     game.NoPieceType,
+		Capture:       false,
+		Side:          game.White,
+	}))
+	pos.Display(false)
+	fmt.Println("Pseudo Legal ", pos.GeneratePseudoLegalMoves())
+	fmt.Println("Legal ------ ", pos.GenerateLegalMoves())
+
+	fmt.Println(pos.Move(&game.Ply{
+		SourceSq:      game.A5,
+		DestinationSq: game.A4,
+		Promotion:     game.NoPieceType,
+		Capture:       false,
+		Side:          game.Black,
+	}))
+	pos.Display(false)
+	fmt.Println("Pseudo Legal ", pos.GeneratePseudoLegalMoves())
+	fmt.Println("Legal ------ ", pos.GenerateLegalMoves())
+
+	fmt.Println(pos.Move(&game.Ply{
+		SourceSq:      game.C1,
+		DestinationSq: game.F4,
+		Promotion:     game.NoPieceType,
+		Capture:       false,
+		Side:          game.White,
+	}))
+	pos.Display(false)
+	fmt.Println("Pseudo Legal ", pos.GeneratePseudoLegalMoves())
+	fmt.Println("Legal ------ ", pos.GenerateLegalMoves())
+
+}
+
+func testPseudoLegalMoves() {
+	b := game.BoardFromMap(NewGame)
+	b.Display(false)
+	fmt.Println("Pseudo Legal Moves ")
+	pos := game.NewPosition(b, game.White, 0, 0, false)
+	pos.Display(false)
+	plm := pos.GeneratePseudoLegalMoves()
+	fmt.Println(plm)
+
+}
+
+func testCheck() {
+	b := game.BoardFromMap(CheckPos)
+	b.Display(false)
+	fmt.Println("White in Check ", b.InCheck(game.White))
+	fmt.Println("Black in Check ", b.InCheck(game.Black))
+}
 func testMovesVector() {
-	b := game.BoardFromMap(InterestingPos)
+	b := game.BoardFromMap(CheckPos)
 	for sq := 0; sq < game.NumSquaresInBoard; sq++ {
 		fmt.Println("Square ", game.Square(sq))
 		fmt.Println("")

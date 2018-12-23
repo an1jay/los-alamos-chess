@@ -37,6 +37,15 @@ const (
 	King
 )
 
+var (
+	// PromotionPieceTypes is a slice of the piece types that pawns may promote to
+	PromotionPieceTypes = [4]PieceType{
+		Knight,
+		Rook,
+		Queen,
+	}
+)
+
 //--------------------------------------------------------------------------------
 
 // Piece is one of the 10 PieceType and Color combinations.
@@ -85,6 +94,37 @@ func (p Piece) String() string {
 		return "Black King"
 	}
 	return "NoPieceType"
+}
+
+// NewPiece returns a piece from a PieceType and Color
+func NewPiece(pt PieceType, c Color) Piece {
+	if c == White {
+		switch pt {
+		case Pawn:
+			return WhitePawn
+		case Knight:
+			return WhiteKnight
+		case Rook:
+			return WhiteRook
+		case Queen:
+			return WhiteQueen
+		case King:
+			return WhiteKing
+		}
+	}
+	switch pt {
+	case Pawn:
+		return BlackPawn
+	case Knight:
+		return BlackKnight
+	case Rook:
+		return BlackRook
+	case Queen:
+		return BlackQueen
+	case King:
+		return BlackKing
+	}
+	return NoPiece
 }
 
 // Color gets the Color
