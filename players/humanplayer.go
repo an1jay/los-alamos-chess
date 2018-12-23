@@ -9,8 +9,8 @@ import (
 // HumanPlayer is a construct to allow a human player to play
 type HumanPlayer struct{}
 
-// Move asks for a move through stdout/stdin
-func (h HumanPlayer) Move(pos *game.Position) *game.Ply {
+// ChooseMove asks for a legal move through stdout/stdin
+func (h HumanPlayer) ChooseMove(pos *game.Position) *game.Ply {
 	fmt.Println("Legal Moves: ", pos.GenerateLegalMoves())
 	p := &game.Ply{}
 	for true {
