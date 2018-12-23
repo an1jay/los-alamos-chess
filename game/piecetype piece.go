@@ -56,7 +56,7 @@ const (
 
 var (
 	// PromotionPieceTypes is a slice of the piece types that pawns may promote to
-	PromotionPieceTypes = [4]PieceType{
+	PromotionPieceTypes = []PieceType{
 		Knight,
 		Rook,
 		Queen,

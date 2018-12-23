@@ -81,7 +81,7 @@ func (pos *Position) Display(symb bool) {
 	if pos.InCheck {
 		checkStr = ""
 	}
-	fmt.Printf("%s is to move. %s is %sin check\n\n", pos.Turn.String(), pos.Turn.String(), checkStr)
+	fmt.Printf("%s is to move. %s is %sin check\n", pos.Turn.String(), pos.Turn.String(), checkStr)
 }
 
 // Move updates the position with the given ply, returning false if illegal or invalid move (does not make the move).
@@ -100,8 +100,22 @@ func (pos *Position) UnsafeMove(p *Ply) {
 		pos.MoveNumber++
 	}
 	pos.HalfMoveClock++
+	fmt.Println(p.Side, "makes a move")
+	fmt.Println(pos.Turn, "is the current Turn")
 	pos.Turn = pos.Turn.Other()
-	pos.InCheck = pos.Bd.InCheck(pos.Turn)
+	fmt.Println(pos.Turn, "is the current Turn after turn.Other")
+
+	if pos.Bd.InCheck(pos.Turn) {
+		fmt.Println("WTF")
+		(*pos).InCheck = true
+	} else {
+		pos.InCheck = false
+	}
+	// pos.InCheck = pos.Bd.InCheck(pos.Turn)
+	fmt.Println("White in Check: ", pos.Bd.InCheck(White))
+	fmt.Println("Black in Check: ", pos.Bd.InCheck(Black))
+	fmt.Println("FInal pos.InCheck: ", pos.InCheck)
+	fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
 }
 
 // LegalMove returns whether a move is legal.
@@ -110,8 +124,12 @@ func (pos *Position) LegalMove(p *Ply) bool {
 	if !(p.Side == pos.Turn) {
 		return false
 	}
+	// Check if piece being moved is yours
+	if !pos.Bd.PieceOccupancy(p.Side).Occupied(p.SourceSq) {
+		return false
+	}
 	// Check destination square is empty if capture is true
-	if !(pos.Bd.Piece(p.DestinationSq) == NoPiece) {
+	if !(pos.Bd.Piece(p.DestinationSq) == NoPiece) && (p.Capture == false) {
 		return false
 	}
 	// Check if the piece can actually move there
@@ -176,15 +194,16 @@ func (pos *Position) GeneratePseudoLegalMoves() []*Ply {
 								Side:          pos.Turn,
 							})
 						}
+					} else {
+						// if not a pawn, add move to pseudolegal plies
+						PseudoLegalPlies = append(PseudoLegalPlies, &Ply{
+							SourceSq:      Square(startSq),
+							DestinationSq: Square(endSq),
+							Capture:       otherPieces.Occupied(Square(endSq)),
+							Promotion:     NoPieceType,
+							Side:          pos.Turn,
+						})
 					}
-					// if not a pawn, add move to pseudolegal plies
-					PseudoLegalPlies = append(PseudoLegalPlies, &Ply{
-						SourceSq:      Square(startSq),
-						DestinationSq: Square(endSq),
-						Capture:       otherPieces.Occupied(Square(endSq)),
-						Promotion:     NoPieceType,
-						Side:          pos.Turn,
-					})
 				}
 			}
 		}
@@ -192,13 +211,28 @@ func (pos *Position) GeneratePseudoLegalMoves() []*Ply {
 	return PseudoLegalPlies
 }
 
+// InsufficientMaterial returns true if both sides only have kings
+func (pos *Position) InsufficientMaterial() bool {
+	return false
+}
+
 // Result returns the current result of the position
 func (pos *Position) Result() Result {
 	// check checkmate
 	numLegalMoves := len(pos.GenerateLegalMoves())
-	if numLegalMoves == 0 && pos.InCheck {
-		return NewResultWin(pos.Turn.Other())
-	} else if numLegalMoves == 0 {
+	if numLegalMoves == 0 {
+		// if pos.Bd.InCheck(White) && White == pos.Turn {
+		// 	return NewResultWin(Black)
+		// } else if pos.Bd.InCheck(Black) && Black == pos.Turn {
+		// 	return NewResultWin(White)
+		// } else {
+		// 	fmt.Println("SOmethign Worng")
+		// }
+
+		if pos.Bd.InCheck(pos.Turn) {
+			return NewResultWin(pos.Turn.Other())
+		}
+	} else if numLegalMoves == 0 || pos.InsufficientMaterial() {
 		return Draw
 	}
 	return InPlay

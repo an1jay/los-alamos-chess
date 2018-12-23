@@ -32,32 +32,33 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 		// depending on whose move, get move
 		if pos.Turn == game.White {
 			if verbose {
-				fmt.Println("")
+				// fmt.Println("")
 				pos.Display(false)
 			}
 			mW := white.ChooseMove(pos)
 			g.moveHistory = append(g.moveHistory, mW)
 			if !pos.LegalMove(mW) {
-				fmt.Printf("White plays illegal move - %s\n", mW.String())
+				fmt.Printf("White plays illegal move - %s\n\n", mW.String())
 				return game.BlackWin
 			}
 			pos.Move(mW)
 			if verbose {
-				fmt.Printf("White plays %s\n", mW.String())
+				fmt.Printf("White plays %s\n\n", mW.String())
 			}
 		} else if pos.Turn == game.Black {
 			if verbose {
+				fmt.Println("")
 				pos.Display(false)
 			}
 			mB := black.ChooseMove(pos)
 			g.moveHistory = append(g.moveHistory, mB)
 			if !pos.LegalMove(mB) {
-				fmt.Printf("Black plays illegal move - %s\n", mB.String())
+				fmt.Printf("Black plays illegal move - %s\n\n", mB.String())
 				return game.WhiteWin
 			}
 			pos.Move(mB)
 			if verbose {
-				fmt.Printf("Black plays %s\n", mB.String())
+				fmt.Printf("Black plays %s\n\n", mB.String())
 			}
 		}
 
@@ -65,7 +66,11 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 		res := pos.Result()
 		if res != game.InPlay {
 			if verbose {
+				fmt.Println("")
+				fmt.Println("Game Over! \nFinal Position")
+				fmt.Println("Move History: ", g.moveHistory)
 				fmt.Println(res)
+				pos.Display(false)
 			}
 			return res
 		}

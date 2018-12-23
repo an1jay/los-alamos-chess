@@ -14,6 +14,7 @@ func main() {
 	// timeBBReverse()
 	g := Game{}
 	g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
+	// g.Play(players.RandomPlayer{}, players.RandomPlayer{}, true)
 }
 
 func testMove() {
