@@ -21,6 +21,23 @@ func (p PieceType) String() string {
 	return ""
 }
 
+// PieceTypeFromString returns a PieceType from string. See definition for details.
+func PieceTypeFromString(s string) PieceType {
+	switch s {
+	case "Pawn":
+		return Pawn
+	case "Knight":
+		return Knight
+	case "Rook":
+		return Rook
+	case "Queen":
+		return Queen
+	case "King":
+		return King
+	}
+	return NoPieceType
+}
+
 const (
 	// NoPieceType represents the type of 'no piece'
 	NoPieceType PieceType = iota
