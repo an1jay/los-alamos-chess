@@ -42,11 +42,23 @@ const (
 )
 
 // GameOver returns true if the game state is not equal to GameOver
-func (g Result) GameOver() bool {
-	if g == InPlay {
+func (r Result) GameOver() bool {
+	if r == InPlay {
 		return false
 	}
 	return true
+}
+
+func (r Result) String() string {
+	switch r {
+	case BlackWin:
+		return "Black Win"
+	case WhiteWin:
+		return "White Win"
+	case Draw:
+		return "Draw"
+	}
+	return "In Play"
 }
 
 // NewResultWin returns a win for the color c. If c is NoColor, then Draw is returned.

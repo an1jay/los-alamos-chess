@@ -6,17 +6,19 @@ import (
 	"time"
 
 	"github.com/an1jay/los-alamos-chess/game"
+	"github.com/an1jay/los-alamos-chess/players"
 )
 
 func main() {
 	// testBoardMove()
 	// timeBBReverse()
-	testMove()
+	g := Game{}
+	g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
 }
 
 func testMove() {
 	b := game.BoardFromMap(NewGame)
-	pos := game.NewPosition(b, game.White, 0, 0, false)
+	pos := game.NewPosition(b, game.White, 0, 0)
 
 	fmt.Println("New Game pos")
 	pos.Display(false)
@@ -62,7 +64,7 @@ func testPseudoLegalMoves() {
 	b := game.BoardFromMap(NewGame)
 	b.Display(false)
 	fmt.Println("Pseudo Legal Moves ")
-	pos := game.NewPosition(b, game.White, 0, 0, false)
+	pos := game.NewPosition(b, game.White, 0, 0)
 	pos.Display(false)
 	plm := pos.GeneratePseudoLegalMoves()
 	fmt.Println(plm)

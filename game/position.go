@@ -1,6 +1,8 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Position stores the entire gamestate at a point in time.
 type Position struct {
@@ -19,6 +21,56 @@ func NewPosition(bd *Board, turn Color, moveNumber, halfMoveClock uint) *Positio
 		MoveNumber:    moveNumber,
 		HalfMoveClock: halfMoveClock,
 		InCheck:       bd.InCheck(turn),
+	}
+}
+
+// NewGamePosition returns a position at the start of a game.
+func NewGamePosition() *Position {
+	bd := BoardFromMap(
+		map[Square]Piece{
+			A1: WhiteRook,
+			B1: WhiteKnight,
+			C1: WhiteQueen,
+			D1: WhiteKing,
+			E1: WhiteKnight,
+			F1: WhiteRook,
+			A2: WhitePawn,
+			B2: WhitePawn,
+			C2: WhitePawn,
+			D2: WhitePawn,
+			E2: WhitePawn,
+			F2: WhitePawn,
+			A3: NoPiece,
+			B3: NoPiece,
+			C3: NoPiece,
+			D3: NoPiece,
+			E3: NoPiece,
+			F3: NoPiece,
+			A4: NoPiece,
+			B4: NoPiece,
+			C4: NoPiece,
+			D4: NoPiece,
+			E4: NoPiece,
+			F4: NoPiece,
+			A5: BlackPawn,
+			B5: BlackPawn,
+			C5: BlackPawn,
+			D5: BlackPawn,
+			E5: BlackPawn,
+			F5: BlackPawn,
+			A6: BlackRook,
+			B6: BlackKnight,
+			C6: BlackQueen,
+			D6: BlackKing,
+			E6: BlackKnight,
+			F6: BlackRook,
+		})
+	return &Position{
+		Bd:            bd,
+		Turn:          White,
+		MoveNumber:    0,
+		HalfMoveClock: 0,
+		InCheck:       bd.InCheck(White),
 	}
 }
 

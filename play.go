@@ -32,6 +32,7 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 		// depending on whose move, get move
 		if pos.Turn == game.White {
 			if verbose {
+				fmt.Println("")
 				pos.Display(false)
 			}
 			mW := white.ChooseMove(pos)
@@ -63,8 +64,12 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 		// check game over
 		res := pos.Result()
 		if res != game.InPlay {
+			if verbose {
+				fmt.Println(res)
+			}
 			return res
 		}
 
 	}
+	panic("Game somehow not over")
 }
