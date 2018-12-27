@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"math/bits"
 )
 
 // Position stores the entire gamestate at a point in time.
@@ -74,6 +75,17 @@ func NewGamePosition() *Position {
 	}
 }
 
+// Copy returns a pointer to a copy of this position, with a new copy of Board.
+func (pos *Position) Copy() *Position {
+	return &Position{
+		Bd:            pos.Bd.Copy(),
+		Turn:          pos.Turn,
+		MoveNumber:    pos.MoveNumber,
+		HalfMoveClock: pos.HalfMoveClock,
+		InCheck:       pos.InCheck,
+	}
+}
+
 // Display prints a board representation of the position to stdout
 func (pos *Position) Display(symb bool) {
 	pos.Bd.Display(symb)
@@ -100,26 +112,36 @@ func (pos *Position) UnsafeMove(p *Ply) {
 		pos.MoveNumber++
 	}
 	pos.HalfMoveClock++
-	fmt.Println(p.Side, "makes a move")
-	fmt.Println(pos.Turn, "is the current Turn")
+	// fmt.Println(p.Side, "makes a move")
+	// fmt.Println(pos.Turn, "is the current Turn")
 	pos.Turn = pos.Turn.Other()
-	fmt.Println(pos.Turn, "is the current Turn after turn.Other")
-
+	// fmt.Println(pos.Turn, "is the current Turn after turn.Other")
 	if pos.Bd.InCheck(pos.Turn) {
-		fmt.Println("WTF")
-		(*pos).InCheck = true
+		// fmt.Println("WTF")
+		pos.InCheck = true
 	} else {
 		pos.InCheck = false
 	}
 	// pos.InCheck = pos.Bd.InCheck(pos.Turn)
-	fmt.Println("White in Check: ", pos.Bd.InCheck(White))
-	fmt.Println("Black in Check: ", pos.Bd.InCheck(Black))
-	fmt.Println("FInal pos.InCheck: ", pos.InCheck)
-	fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
+	// fmt.Println("FInal pos.InCheck: ", pos.InCheck)
+	// fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
+
+	pos.InCheck = false
+
+	if pos.Bd.InCheck(White) && pos.Turn == White {
+		pos.InCheck = true
+	} else if pos.Bd.InCheck(Black) && pos.Turn == Black {
+		pos.InCheck = true
+	}
+	// fmt.Println("White in Check: ", pos.Bd.InCheck(White))
+	// fmt.Println("Black in Check: ", pos.Bd.InCheck(Black))
+	// fmt.Println("Final pos.InCheck: ", pos.InCheck)
+
 }
 
 // LegalMove returns whether a move is legal.
 func (pos *Position) LegalMove(p *Ply) bool {
+	// fmt.Println("LEgalPly: ", p)
 	// Check side to move
 	if !(p.Side == pos.Turn) {
 		return false
@@ -158,6 +180,20 @@ func (pos *Position) GenerateLegalMoves() []*Ply {
 		}
 	}
 	return LegalPlies
+}
+
+// GenerateCountOfLegalMoves returns number of legal moves.
+func (pos *Position) GenerateCountOfLegalMoves() int {
+	PseudoLegalPlies := pos.GeneratePseudoLegalMoves()
+	var LegalMoveCount int
+	for _, plp := range PseudoLegalPlies {
+		newBd := pos.Bd.Copy()
+		newBd.Move(plp.SourceSq, plp.DestinationSq, NewPiece(plp.Promotion, pos.Turn))
+		if !newBd.InCheck(pos.Turn) {
+			LegalMoveCount++
+		}
+	}
+	return LegalMoveCount
 }
 
 // GeneratePseudoLegalMoves generates a slice of pointers to pseudolegal moves.
@@ -213,13 +249,18 @@ func (pos *Position) GeneratePseudoLegalMoves() []*Ply {
 
 // InsufficientMaterial returns true if both sides only have kings
 func (pos *Position) InsufficientMaterial() bool {
-	return false
+	// fmt.Println("Piece Count: ", bits.OnesCount64(uint64(pos.Bd.PieceOccupancy(pos.Turn))))
+	return bits.OnesCount64(uint64(pos.Bd.PieceOccupancy(pos.Turn))) < 2 && bits.OnesCount64(uint64(pos.Bd.PieceOccupancy(pos.Turn.Other()))) < 2
 }
 
 // Result returns the current result of the position
 func (pos *Position) Result() Result {
+	// check insufficient material
+	if pos.InsufficientMaterial() {
+		return Draw
+	}
 	// check checkmate
-	numLegalMoves := len(pos.GenerateLegalMoves())
+	numLegalMoves := pos.GenerateCountOfLegalMoves()
 	if numLegalMoves == 0 {
 		// if pos.Bd.InCheck(White) && White == pos.Turn {
 		// 	return NewResultWin(Black)
@@ -232,8 +273,8 @@ func (pos *Position) Result() Result {
 		if pos.Bd.InCheck(pos.Turn) {
 			return NewResultWin(pos.Turn.Other())
 		}
-	} else if numLegalMoves == 0 || pos.InsufficientMaterial() {
 		return Draw
+
 	}
 	return InPlay
 }

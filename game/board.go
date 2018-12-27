@@ -1,6 +1,9 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+	"math/bits"
+)
 
 // Board represents the pieces on the Los Alamos chess board
 type Board struct {
@@ -135,6 +138,15 @@ func (b *Board) BitBoardForPiece(p Piece) BitBoard {
 	return BitBoard(1 << 63)
 }
 
+// MaterialCount returns a copy of the bitboard for piece p
+func (b *Board) MaterialCount(c Color) map[PieceType]int {
+	m := map[PieceType]int{}
+	for _, pt := range AllPieceTypes {
+		m[pt] = bits.OnesCount64(uint64(b.BitBoardForPiece(NewPiece(pt, c))))
+	}
+	return m
+}
+
 // SetBBForPiece sets the bitboard for piece p to b
 func (b *Board) SetBBForPiece(p Piece, bb BitBoard) {
 	switch p {
@@ -183,20 +195,13 @@ func (b *Board) UpdateConvenienceBBs() {
 func (b *Board) Move(source, destination Square, promotionPiece Piece) {
 	movePiece := b.Piece(source)
 	capturePiece := b.Piece(destination)
-	// if movePiece == NoPiece {
-	// 	fmt.Println("Board.Move: trying to move NoPiece")
-	// 	return false
-	// }
-
 	// set bitboard for movePiece at source square zero
 	b.SetBBForPiece(movePiece, b.BitBoardForPiece(movePiece).SetSquareOnBB(source, false))
-
 	// set bitboard for capPiece at destination square zero
 	if capturePiece != NoPiece {
 		b.SetBBForPiece(capturePiece, b.BitBoardForPiece(capturePiece).SetSquareOnBB(destination, false))
 		// b.setBBForPiece(capturePiece, b.bbForPiece(capturePiece)^BBForSquare(destination))
 	}
-
 	// if promotionPiece, make destination square of movepiece bitboard 1, else make the destination square of promotionPiece bitboard 1.
 	if promotionPiece == NoPiece {
 		// set bitboard for movePiece at destination square one

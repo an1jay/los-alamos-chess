@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/an1jay/los-alamos-chess/game"
+	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
 // Player defines a struct with a Move method, which can play Los-Alamos-Chess.
@@ -15,6 +16,7 @@ type Player interface {
 // Game is a game of Los Alamos Chess
 type Game struct {
 	moveHistory []*game.Ply
+	evList      []float32
 }
 
 // Play plays a game of Los Alamos Chess returing a game.Result
@@ -25,17 +27,20 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 	// make new game position
 	pos := game.NewGamePosition()
 
+	// fmt.Println("Legal Move Check")
+
 	// main game loop
 	for true {
 		time.Sleep(100 * time.Millisecond)
 
+		if verbose {
+			// fmt.Println("")
+			pos.Display(true)
+		}
+
 		// depending on whose move, get move
 		if pos.Turn == game.White {
-			if verbose {
-				// fmt.Println("")
-				pos.Display(false)
-			}
-			mW := white.ChooseMove(pos)
+			mW := white.ChooseMove(pos.Copy())
 			g.moveHistory = append(g.moveHistory, mW)
 			if !pos.LegalMove(mW) {
 				fmt.Printf("White plays illegal move - %s\n\n", mW.String())
@@ -46,11 +51,7 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 				fmt.Printf("White plays %s\n\n", mW.String())
 			}
 		} else if pos.Turn == game.Black {
-			if verbose {
-				fmt.Println("")
-				pos.Display(false)
-			}
-			mB := black.ChooseMove(pos)
+			mB := black.ChooseMove(pos.Copy())
 			g.moveHistory = append(g.moveHistory, mB)
 			if !pos.LegalMove(mB) {
 				fmt.Printf("Black plays illegal move - %s\n\n", mB.String())
@@ -62,6 +63,16 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 			}
 		}
 
+		// if pos.HalfMoveClock == 4 {
+		// 	panic("Test")
+		// }
+
+		if verbose {
+			posEv := evaluators.SecondEvaluator{}.Evaluate(pos)
+			g.evList = append(g.evList, posEv)
+			fmt.Printf("Evaluation: %v\n", g.evList)
+		}
+
 		// check game over
 		res := pos.Result()
 		if res != game.InPlay {
@@ -70,7 +81,8 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 				fmt.Println("Game Over! \nFinal Position")
 				fmt.Println("Move History: ", g.moveHistory)
 				fmt.Println(res)
-				pos.Display(false)
+				fmt.Printf("Full Moves: %d\nHalf-Moves: %d\n", pos.MoveNumber, pos.HalfMoveClock)
+				pos.Display(true)
 			}
 			return res
 		}

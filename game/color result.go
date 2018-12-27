@@ -61,6 +61,34 @@ func (r Result) String() string {
 	return "In Play"
 }
 
+// Evaluation returns 100 for a WhiteWin, -100 for a BlackWin, and 0 for a Draw
+func (r Result) Evaluation() float32 {
+	switch r {
+	case BlackWin:
+		return -100
+	case WhiteWin:
+		return 100
+	case Draw:
+		return 0
+	}
+	panic("Should not be evaluating in play position for win/loss/draw")
+	return 0
+}
+
+// EvaluationCoefficient returns -1 for Black, 1 for White
+func (r Result) EvaluationCoefficient() float32 {
+	switch r {
+	case BlackWin:
+		return -1
+	case WhiteWin:
+		return 1
+	case Draw:
+		return 0
+	}
+	panic("Should not be evaluating in play position for win/loss/draw")
+	return 0
+}
+
 // NewResultWin returns a win for the color c. If c is NoColor, then Draw is returned.
 func NewResultWin(c Color) Result {
 	if c == White {

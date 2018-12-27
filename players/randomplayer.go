@@ -12,7 +12,7 @@ import (
 type RandomPlayer struct{}
 
 // ChooseMove asks a random player to move randomly from choice of legal moves.
-func (r RandomPlayer) ChooseMove(pos *game.Position) *game.Ply {
+func (r *RandomPlayer) ChooseMove(pos *game.Position) *game.Ply {
 	rand.Seed(time.Now().UnixNano())
 	lm := pos.GenerateLegalMoves()
 	fmt.Println("Legal Moves: ", lm)

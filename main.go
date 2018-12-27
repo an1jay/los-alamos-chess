@@ -5,16 +5,33 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/pkg/profile"
+
 	"github.com/an1jay/los-alamos-chess/game"
 	"github.com/an1jay/los-alamos-chess/players"
+	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
 func main() {
+	defer profile.Start().Stop()
 	// testBoardMove()
 	// timeBBReverse()
 	g := Game{}
-	g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
-	// g.Play(players.RandomPlayer{}, players.RandomPlayer{}, true)
+	// g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
+
+	m1 := &players.MinimaxPlayer{
+		Ev:        evaluators.FirstEvaluator{},
+		MaxDepth:  3,
+		NodeCount: 0,
+	}
+
+	m2 := &players.MinimaxPlayer{
+		Ev:        evaluators.FirstEvaluator{},
+		MaxDepth:  3,
+		NodeCount: 0,
+	}
+	// r := &players.RandomPlayer{}
+	g.Play(m1, m2, true)
 }
 
 func testMove() {

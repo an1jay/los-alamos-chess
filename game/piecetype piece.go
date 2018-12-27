@@ -61,6 +61,15 @@ var (
 		Rook,
 		Queen,
 	}
+
+	// AllPieceTypes is a slice of the piece types that pawns may promote to
+	AllPieceTypes = []PieceType{
+		Pawn,
+		Knight,
+		Rook,
+		Queen,
+		King,
+	}
 )
 
 //--------------------------------------------------------------------------------
