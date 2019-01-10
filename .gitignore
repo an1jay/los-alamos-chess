@@ -2,6 +2,11 @@
 .vscode/
 debug
 
+#pdfs
+*.pdf
+
+#pprofs
+*.pprof
 
 # Binaries for programs and plugins
 *.exe

@@ -20,14 +20,14 @@ func main() {
 	// g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
 
 	m1 := &players.AlphaBetaPlayer{
-		Ev:        evaluators.FirstEvaluator{},
-		MaxDepth:  4,
+		Ev:        evaluators.SecondEvaluator{},
+		MaxDepth:  5,
 		NodeCount: 0,
 	}
 
 	m2 := &players.AlphaBetaPlayer{
-		Ev:        evaluators.FirstEvaluator{},
-		MaxDepth:  4,
+		Ev:        evaluators.SecondEvaluator{},
+		MaxDepth:  5,
 		NodeCount: 0,
 	}
 	// r := &players.RandomPlayer{}

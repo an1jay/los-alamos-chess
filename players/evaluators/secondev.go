@@ -21,10 +21,10 @@ func (b SecondEvaluator) Evaluate(pos *game.Position) float32 {
 	backUpTurn := pos.Turn
 
 	pos.Turn = game.White
-	WhiteLegalMoves := float32(pos.GenerateCountOfLegalMoves())
+	WhiteLegalMoves := float32(pos.GenerateCountOfPseudoLegalMoves())
 
 	pos.Turn = game.Black
-	BlackLegalMoves := float32(pos.GenerateCountOfLegalMoves())
+	BlackLegalMoves := float32(pos.GenerateCountOfPseudoLegalMoves())
 
 	pos.Turn = backUpTurn
 

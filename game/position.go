@@ -247,6 +247,41 @@ func (pos *Position) GeneratePseudoLegalMoves() []*Ply {
 	return PseudoLegalPlies
 }
 
+// GenerateCountOfPseudoLegalMoves returns the number pseudolegal moves.
+func (pos *Position) GenerateCountOfPseudoLegalMoves() int {
+	// update convenience bitboards
+	pos.Bd.UpdateConvenienceBBs()
+
+	var plplies int
+	piece := NoPiece
+
+	// get all possible pieces able to move
+	moverPieces := pos.Bd.PieceOccupancy(pos.Turn)
+
+	// loop over source squares
+	for startSq := 0; startSq < NumSquaresInBoard; startSq++ {
+		// if the mover has a piece there
+		if moverPieces.Occupied(Square(startSq)) {
+			piece = pos.Bd.Piece(Square(startSq))
+			// calculate all the pieces moves
+			mvVector := pos.Bd.MovesVector(Square(startSq))
+			for endSq := 0; endSq < NumSquaresInBoard; endSq++ {
+				// for each piece move
+				if mvVector.Occupied(Square(endSq)) {
+					// check if mover is a pawn and destination square is on either the 1st or 6th ranks and add promotions
+					if piece.PieceType() == Pawn && (Square(endSq).Rank() == Rank1 || Square(endSq).Rank() == Rank6) {
+						plplies += 3 // can promote to knight, queen, or rook, alternatively, len(PromotionPieceTypes)
+					} else {
+						// if not a pawn, increment pseudolegal plies
+						plplies++
+					}
+				}
+			}
+		}
+	}
+	return plplies
+}
+
 // InsufficientMaterial returns true if both sides only have kings
 func (pos *Position) InsufficientMaterial() bool {
 	// fmt.Println("Piece Count: ", bits.OnesCount64(uint64(pos.Bd.PieceOccupancy(pos.Turn))))
@@ -277,4 +312,12 @@ func (pos *Position) Result() Result {
 
 	}
 	return InPlay
+}
+
+// ZobristHash is a map of random numbers used to calculate the Zobrist hash of a position
+var ZobristHash map[Square]map[Piece]uint64
+
+// ZobristHash returns a Zobrist hash of the position using the table
+func (pos *Position) ZobristHash() uint64 {
+	return 0
 }

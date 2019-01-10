@@ -57,7 +57,7 @@ func (m *MinimaxPlayer) ChooseMove(pos *game.Position) *game.Ply {
 
 	dt := time.Since(t0).Seconds()
 	fmt.Printf("Minimax Player explored %d nodes in %.02f seconds at %.02f nodes/s \n", m.NodeCount, dt, float64(m.NodeCount)/dt)
-	fmt.Println(pos.GenerateLegalMoves())
+	// fmt.Println(pos.GenerateLegalMoves())
 	fmt.Printf("Best Score was %f\n", bestScore)
 	return bestMove
 }
