@@ -19,23 +19,26 @@ func main() {
 	g := Game{}
 	// g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
 
-	m1 := &players.MinimaxPlayer{
+	m1 := &players.AlphaBetaPlayer{
 		Ev:        evaluators.FirstEvaluator{},
-		MaxDepth:  3,
+		MaxDepth:  4,
 		NodeCount: 0,
 	}
 
-	m2 := &players.MinimaxPlayer{
+	m2 := &players.AlphaBetaPlayer{
 		Ev:        evaluators.FirstEvaluator{},
-		MaxDepth:  3,
+		MaxDepth:  4,
 		NodeCount: 0,
 	}
 	// r := &players.RandomPlayer{}
-	g.Play(m1, m2, true)
+	// m1 := &players.HumanPlayer{}
+	b := game.BoardFromMap(NewGame)
+	pos := game.NewPosition(b, game.White, 0, 0)
+	g.PlayFromPos(m1, m2, true, pos)
 }
 
 func testMove() {
-	b := game.BoardFromMap(NewGame)
+	b := game.BoardFromMap(InterestingPos)
 	pos := game.NewPosition(b, game.White, 0, 0)
 
 	fmt.Println("New Game pos")

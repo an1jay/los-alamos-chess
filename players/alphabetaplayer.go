@@ -8,29 +8,33 @@ import (
 	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
-// MinimaxPlayer plays according to the minimax algorithm
-type MinimaxPlayer struct {
+// AlphaBetaPlayer plays according to the minimax algorithm and alpha-beta pruning
+type AlphaBetaPlayer struct {
 	Ev        evaluators.Evaluator
 	MaxDepth  uint
 	NodeCount uint
 }
 
 // ChooseMove returns a move chosen by Minimax
-func (m *MinimaxPlayer) ChooseMove(pos *game.Position) *game.Ply {
-	fmt.Println("Minimax Player thinks ...")
+func (m *AlphaBetaPlayer) ChooseMove(pos *game.Position) *game.Ply {
+	fmt.Println("Alpha Beta Player thinks ...")
 	m.NodeCount = 0
 	t0 := time.Now()
 	bestScore := DefaultVal * game.NewResultWin(pos.Turn.Other()).EvaluationCoefficient() // * 10   // -100 for white; 100 for black
 	// fmt.Println("Best Score: ", bestScore)
 	var bestMove *game.Ply
 	legalMoves := pos.GenerateLegalMoves()
-	fmt.Println("Legal Moves: \n", legalMoves)
+	// fmt.Println("Legal Moves: \n", legalMoves)
+
+	alpha := -DefaultVal
+	beta := DefaultVal
+
 	switch pos.Turn {
 	case game.White:
 		for _, lgm := range legalMoves {
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
-			scr := m.Minimax(m.MaxDepth, game.Black, newPos)
+			scr := m.MinimaxAB(m.MaxDepth, game.Black, alpha, beta, newPos)
 			if scr == game.NewResultWin(game.White).Evaluation() {
 				return lgm
 			}
@@ -43,7 +47,7 @@ func (m *MinimaxPlayer) ChooseMove(pos *game.Position) *game.Ply {
 		for _, lgm := range legalMoves {
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
-			scr := m.Minimax(m.MaxDepth, game.White, newPos)
+			scr := m.MinimaxAB(m.MaxDepth, game.White, alpha, beta, newPos)
 			if scr == game.NewResultWin(game.Black).Evaluation() {
 				return lgm
 			}
@@ -62,11 +66,8 @@ func (m *MinimaxPlayer) ChooseMove(pos *game.Position) *game.Ply {
 	return bestMove
 }
 
-// DefaultVal is larger than maximum possible evaluation
-const DefaultVal float32 = 1000
-
-// Minimax calculates the minimax value for a position
-func (m *MinimaxPlayer) Minimax(depth uint, side game.Color, pos *game.Position) float32 {
+// MinimaxAB calculates the minimax value for a position
+func (m *AlphaBetaPlayer) MinimaxAB(depth uint, side game.Color, alpha, beta float32, pos *game.Position) float32 {
 	m.NodeCount++
 
 	// if at a terminal node, evaluate:
@@ -85,30 +86,24 @@ func (m *MinimaxPlayer) Minimax(depth uint, side game.Color, pos *game.Position)
 		for _, lgm := range pos.GenerateLegalMoves() {
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
-			value = max(value, m.Minimax(depth-1, game.Black, newPos))
+			value = max(value, m.MinimaxAB(depth-1, game.Black, alpha, beta, newPos))
+			alpha = max(alpha, value)
+			if alpha >= beta {
+				break
+			}
 		}
 	case game.Black:
 		value *= 1
 		for _, lgm := range pos.GenerateLegalMoves() {
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
-			value = min(value, m.Minimax(depth-1, game.White, newPos))
+			value = min(value, m.MinimaxAB(depth-1, game.White, alpha, beta, newPos))
+			beta = min(beta, value)
+			if alpha >= beta {
+				break
+			}
 		}
 	}
 
 	return value
-}
-
-func max(x, y float32) float32 {
-	if x > y {
-		return x
-	}
-	return y
-}
-
-func min(x, y float32) float32 {
-	if x < y {
-		return x
-	}
-	return y
 }

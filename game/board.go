@@ -138,7 +138,7 @@ func (b *Board) BitBoardForPiece(p Piece) BitBoard {
 	return BitBoard(1 << 63)
 }
 
-// MaterialCount returns a copy of the bitboard for piece p
+// MaterialCount returns number of ones on the bitboard for piece p
 func (b *Board) MaterialCount(c Color) map[PieceType]int {
 	m := map[PieceType]int{}
 	for _, pt := range AllPieceTypes {

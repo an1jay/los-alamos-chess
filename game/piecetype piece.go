@@ -225,7 +225,7 @@ var (
 		WhiteQueen:  "Q",
 		WhiteKing:   "K",
 
-		BlackPawn:   "p",
+		BlackPawn:   "ℼ",
 		BlackKnight: "n",
 		BlackRook:   "r",
 		BlackQueen:  "q",

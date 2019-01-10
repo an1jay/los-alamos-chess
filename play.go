@@ -19,13 +19,13 @@ type Game struct {
 	evList      []float32
 }
 
-// Play plays a game of Los Alamos Chess returing a game.Result
-func (g Game) Play(white, black Player, verbose bool) game.Result {
+// PlayFromPos plays a game of Los Alamos Chess from given position returing a game.Result
+func (g Game) PlayFromPos(white, black Player, verbose bool, posToPlayFrom *game.Position) game.Result {
 	// make move list
 	g.moveHistory = []*game.Ply{}
 
 	// make new game position
-	pos := game.NewGamePosition()
+	pos := posToPlayFrom
 
 	// fmt.Println("Legal Move Check")
 
@@ -35,7 +35,7 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 
 		if verbose {
 			// fmt.Println("")
-			pos.Display(true)
+			pos.Display(false)
 		}
 
 		// depending on whose move, get move
@@ -63,12 +63,12 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 			}
 		}
 
-		// if pos.HalfMoveClock == 4 {
+		// if pos.HalfMoveClock == 8 {
 		// 	panic("Test")
 		// }
 
 		if verbose {
-			posEv := evaluators.SecondEvaluator{}.Evaluate(pos)
+			posEv := evaluators.FirstEvaluator{}.Evaluate(pos)
 			g.evList = append(g.evList, posEv)
 			fmt.Printf("Evaluation: %v\n", g.evList)
 		}
@@ -82,7 +82,7 @@ func (g Game) Play(white, black Player, verbose bool) game.Result {
 				fmt.Println("Move History: ", g.moveHistory)
 				fmt.Println(res)
 				fmt.Printf("Full Moves: %d\nHalf-Moves: %d\n", pos.MoveNumber, pos.HalfMoveClock)
-				pos.Display(true)
+				pos.Display(false)
 			}
 			return res
 		}
