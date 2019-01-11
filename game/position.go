@@ -314,10 +314,14 @@ func (pos *Position) Result() Result {
 	return InPlay
 }
 
-// ZobristHash is a map of random numbers used to calculate the Zobrist hash of a position
-var ZobristHash map[Square]map[Piece]uint64
+// ZobristHashMap is a map of random numbers used to calculate the Zobrist hash of a position
+var ZobristHashMap map[Square]map[Piece]uint64
 
 // ZobristHash returns a Zobrist hash of the position using the table
 func (pos *Position) ZobristHash() uint64 {
-	return 0
+	var hash uint64
+	for sq := 0; sq < numSquaresInBoard; sq++ {
+		hash ^= ZobristHashMap[Square(sq)][pos.Bd.Piece(Square(sq))]
+	}
+	return hash
 }
