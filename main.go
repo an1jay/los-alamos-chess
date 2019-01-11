@@ -5,15 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pkg/profile"
-
 	"github.com/an1jay/los-alamos-chess/game"
 	"github.com/an1jay/los-alamos-chess/players"
 	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
 func main() {
-	defer profile.Start().Stop()
+	// defer profile.Start().Stop()
 	// testBoardMove()
 	// timeBBReverse()
 	g := Game{}
@@ -33,13 +31,13 @@ func main() {
 	// r := &players.RandomPlayer{}
 	m1 := &players.HumanPlayer{}
 	b := game.BoardFromMap(NewGame)
-	pos := game.NewPosition(b, game.White, 0, 0)
+	pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 	g.PlayFromPos(m1, m2, true, pos)
 }
 
 func testMove() {
 	b := game.BoardFromMap(InterestingPos)
-	pos := game.NewPosition(b, game.White, 0, 0)
+	pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 
 	fmt.Println("New Game pos")
 	pos.Display(false)
@@ -85,7 +83,7 @@ func testPseudoLegalMoves() {
 	b := game.BoardFromMap(NewGame)
 	b.Display(false)
 	fmt.Println("Pseudo Legal Moves ")
-	pos := game.NewPosition(b, game.White, 0, 0)
+	pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 	pos.Display(false)
 	plm := pos.GeneratePseudoLegalMoves()
 	fmt.Println(plm)
