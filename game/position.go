@@ -12,16 +12,18 @@ type Position struct {
 	MoveNumber    uint
 	HalfMoveClock uint
 	InCheck       bool
+	HashList      []uint64
 }
 
 // NewPosition constructs a new position.
-func NewPosition(bd *Board, turn Color, moveNumber, halfMoveClock uint) *Position {
+func NewPosition(bd *Board, turn Color, moveNumber, halfMoveClock uint, hashlist []uint64) *Position {
 	return &Position{
 		Bd:            bd,
 		Turn:          turn,
 		MoveNumber:    moveNumber,
 		HalfMoveClock: halfMoveClock,
 		InCheck:       bd.InCheck(turn),
+		HashList:      hashlist,
 	}
 }
 
@@ -115,16 +117,16 @@ func (pos *Position) UnsafeMove(p *Ply) {
 	// fmt.Println(p.Side, "makes a move")
 	// fmt.Println(pos.Turn, "is the current Turn")
 	pos.Turn = pos.Turn.Other()
-	// fmt.Println(pos.Turn, "is the current Turn after turn.Other")
-	if pos.Bd.InCheck(pos.Turn) {
-		// fmt.Println("WTF")
-		pos.InCheck = true
-	} else {
-		pos.InCheck = false
-	}
-	// pos.InCheck = pos.Bd.InCheck(pos.Turn)
-	// fmt.Println("FInal pos.InCheck: ", pos.InCheck)
-	// fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
+	// // fmt.Println(pos.Turn, "is the current Turn after turn.Other")
+	// if pos.Bd.InCheck(pos.Turn) {
+	// 	// fmt.Println("WTF")
+	// 	pos.InCheck = true
+	// } else {
+	// 	pos.InCheck = false
+	// }
+	// // pos.InCheck = pos.Bd.InCheck(pos.Turn)
+	// // fmt.Println("FInal pos.InCheck: ", pos.InCheck)
+	// // fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
 
 	pos.InCheck = false
 
@@ -136,6 +138,7 @@ func (pos *Position) UnsafeMove(p *Ply) {
 	// fmt.Println("White in Check: ", pos.Bd.InCheck(White))
 	// fmt.Println("Black in Check: ", pos.Bd.InCheck(Black))
 	// fmt.Println("Final pos.InCheck: ", pos.InCheck)
+	pos.HashList = append(pos.HashList, pos.ZobristHash())
 
 }
 
@@ -291,9 +294,10 @@ func (pos *Position) InsufficientMaterial() bool {
 // Result returns the current result of the position
 func (pos *Position) Result() Result {
 	// check insufficient material
-	if pos.InsufficientMaterial() {
+	if pos.InsufficientMaterial() || pos.threefoldRepetition() {
 		return Draw
 	}
+
 	// check checkmate
 	numLegalMoves := pos.GenerateCountOfLegalMoves()
 	if numLegalMoves == 0 {
@@ -314,8 +318,23 @@ func (pos *Position) Result() Result {
 	return InPlay
 }
 
-// ZobristHash is a map of random numbers used to calculate the Zobrist hash of a position
-var ZobristHash = map[Square]map[Piece]uint64{A1: map[Piece]uint64{NoPiece: 11773386922175966982, WhitePawn: 16287117459286898574, WhiteKnight: 1596030731072225293, WhiteRook: 6908381805289842349, WhiteQueen: 1471855846966644088, WhiteKing: 13946128460607735265, BlackPawn: 933481857740680097, BlackKnight: 4822007064700398354, BlackRook: 6198724923208203700, BlackQueen: 17946889222579085311, BlackKing: 6270309927917970168},
+// threefoldRepetition returns bool of whether oor not three fold repeition has occured
+func (pos *Position) threefoldRepetition() bool {
+	currenthash := pos.ZobristHash()
+	var counter uint8
+	for i := len(pos.HashList) - 1; i >= 0; i-- {
+		if pos.HashList[i] == currenthash {
+			counter++
+			if counter > 2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// ZobristHashMap is a map of random numbers used to calculate the Zobrist hash of a position
+var ZobristHashMap = map[Square]map[Piece]uint64{A1: map[Piece]uint64{NoPiece: 11773386922175966982, WhitePawn: 16287117459286898574, WhiteKnight: 1596030731072225293, WhiteRook: 6908381805289842349, WhiteQueen: 1471855846966644088, WhiteKing: 13946128460607735265, BlackPawn: 933481857740680097, BlackKnight: 4822007064700398354, BlackRook: 6198724923208203700, BlackQueen: 17946889222579085311, BlackKing: 6270309927917970168},
 	A2: map[Piece]uint64{NoPiece: 6072176031918769629, WhitePawn: 17925223329797815625, WhiteKnight: 14615379492287389764, WhiteRook: 8922529181293848742, WhiteQueen: 2186575892497350080, WhiteKing: 11255819383249683110, BlackPawn: 9455613954418737896, BlackKnight: 8787529630854465939, BlackRook: 15080278555260971654, BlackQueen: 10822588433193164194, BlackKing: 6098849504152491340},
 	A3: map[Piece]uint64{NoPiece: 16527254978915964266, WhitePawn: 16031150834041543796, WhiteKnight: 3536296654515895987, WhiteRook: 1482412321804371265, WhiteQueen: 15815380194503815770, WhiteKing: 11780042619164385330, BlackPawn: 12226390934754713528, BlackKnight: 2624779950949833695, BlackRook: 5204219537379946078, BlackQueen: 5630195549636017477, BlackKing: 8992578851473221649},
 	A4: map[Piece]uint64{NoPiece: 17492292331866303211, WhitePawn: 5865978329968989632, WhiteKnight: 3575330857263971148, WhiteRook: 5135785284106165524, WhiteQueen: 17346646487532452867, WhiteKing: 17006776898343501925, BlackPawn: 14761012425106088848, BlackKnight: 1133808653343760861, BlackRook: 11705866394343143641, BlackQueen: 810765885738391414, BlackKing: 16402293007870477108},
@@ -357,5 +376,9 @@ var ZobristHash = map[Square]map[Piece]uint64{A1: map[Piece]uint64{NoPiece: 1177
 
 // ZobristHash returns a Zobrist hash of the position using the table
 func (pos *Position) ZobristHash() uint64 {
-	return 0
+	var hash uint64
+	for sq := 0; sq < numSquaresInBoard; sq++ {
+		hash ^= ZobristHashMap[Square(sq)][pos.Bd.Piece(Square(sq))]
+	}
+	return hash
 }
