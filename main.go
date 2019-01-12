@@ -17,11 +17,11 @@ func main() {
 	g := Game{}
 	// g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
 
-	// m1 := &players.AlphaBetaPlayer{
-	// 	Ev:        evaluators.SecondEvaluator{},
-	// 	MaxDepth:  5,
-	// 	NodeCount: 0,
-	// }
+	m1 := &players.AlphaBetaPlayer{
+		Ev:        evaluators.SecondEvaluator{},
+		MaxDepth:  5,
+		NodeCount: 0,
+	}
 
 	m2 := &players.AlphaBetaPlayer{
 		Ev:        evaluators.SecondEvaluator{},
@@ -29,7 +29,7 @@ func main() {
 		NodeCount: 0,
 	}
 	// r := &players.RandomPlayer{}
-	m1 := &players.HumanPlayer{}
+	// m1 := &players.HumanPlayer{}
 	b := game.BoardFromMap(NewGame)
 	pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 	g.PlayFromPos(m1, m2, true, pos)

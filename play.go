@@ -42,7 +42,7 @@ func (g Game) PlayFromPos(white, black Player, verbose bool, posToPlayFrom *game
 		if pos.Turn == game.White {
 			mW := white.ChooseMove(pos.Copy())
 			g.moveHistory = append(g.moveHistory, mW)
-			if !pos.LegalMove(mW) {
+			if !pos.LegalPly(mW) {
 				fmt.Printf("White plays illegal move - %s\n\n", mW.String())
 				return game.BlackWin
 			}
@@ -53,7 +53,7 @@ func (g Game) PlayFromPos(white, black Player, verbose bool, posToPlayFrom *game
 		} else if pos.Turn == game.Black {
 			mB := black.ChooseMove(pos.Copy())
 			g.moveHistory = append(g.moveHistory, mB)
-			if !pos.LegalMove(mB) {
+			if !pos.LegalPly(mB) {
 				fmt.Printf("Black plays illegal move - %s\n\n", mB.String())
 				return game.WhiteWin
 			}

@@ -99,7 +99,7 @@ func (pos *Position) Display(symb bool) {
 
 // Move updates the position with the given ply, returning false if illegal or invalid move (does not make the move).
 func (pos *Position) Move(p *Ply) bool {
-	if !pos.LegalMove(p) {
+	if !pos.LegalPly(p) {
 		return false
 	}
 	pos.UnsafeMove(p)
@@ -113,37 +113,19 @@ func (pos *Position) UnsafeMove(p *Ply) {
 		pos.MoveNumber++
 	}
 	pos.HalfMoveClock++
-	// fmt.Println(p.Side, "makes a move")
-	// fmt.Println(pos.Turn, "is the current Turn")
 	pos.Turn = pos.Turn.Other()
-	// // fmt.Println(pos.Turn, "is the current Turn after turn.Other")
-	// if pos.Bd.InCheck(pos.Turn) {
-	// 	// fmt.Println("WTF")
-	// 	pos.InCheck = true
-	// } else {
-	// 	pos.InCheck = false
-	// }
-	// // pos.InCheck = pos.Bd.InCheck(pos.Turn)
-	// // fmt.Println("FInal pos.InCheck: ", pos.InCheck)
-	// // fmt.Println("FInal pos.InCheck assignment: ", pos.Bd.InCheck(pos.Turn))
-
 	pos.InCheck = false
-
-	if pos.Bd.InCheck(White) && pos.Turn == White {
+	if pos.Turn == White && pos.Bd.InCheck(White) {
 		pos.InCheck = true
-	} else if pos.Bd.InCheck(Black) && pos.Turn == Black {
+	} else if pos.Turn == Black && pos.Bd.InCheck(Black) {
 		pos.InCheck = true
 	}
-	// fmt.Println("White in Check: ", pos.Bd.InCheck(White))
-	// fmt.Println("Black in Check: ", pos.Bd.InCheck(Black))
-	// fmt.Println("Final pos.InCheck: ", pos.InCheck)
 	pos.HashList = append(pos.HashList, pos.ZobristHash())
 
 }
 
-// LegalMove returns whether a move is legal.
-func (pos *Position) LegalMove(p *Ply) bool {
-	// fmt.Println("LEgalPly: ", p)
+// LegalPly returns whether a move is legal.
+func (pos *Position) LegalPly(p *Ply) bool {
 	// Check side to move
 	if !(p.Side == pos.Turn) {
 		return false

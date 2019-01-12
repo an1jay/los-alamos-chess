@@ -17,7 +17,7 @@ func (h *HumanPlayer) ChooseMove(pos *game.Position) *game.Ply {
 		fmt.Println("Enter Move (e.g. 'e5xd6=Knight' denotes a capture from e5 to e6, with promotion to Knight): ")
 		var move string
 		_, err := fmt.Scan(&move)
-		if err != nil {
+		if err != nil || len(move) < 6 {
 			fmt.Println("Try Again")
 			continue
 		}
@@ -29,7 +29,7 @@ func (h *HumanPlayer) ChooseMove(pos *game.Position) *game.Ply {
 		p.Side = pos.Turn
 		p.Promotion = game.PieceTypeFromString(move[6:])
 
-		if pos.LegalMove(p) {
+		if pos.LegalPly(p) {
 			break
 		}
 		fmt.Println("Try Again")
