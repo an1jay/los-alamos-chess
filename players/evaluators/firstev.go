@@ -16,13 +16,13 @@ func (b FirstEvaluator) Evaluate(pos *game.Position) float32 {
 	WhiteMaterial := pos.Bd.MaterialCount(game.White)
 	BlackMaterial := pos.Bd.MaterialCount(game.Black)
 
-	materialScore := MaterialWeighter(WhiteMaterial) - MaterialWeighter(BlackMaterial)
+	materialScore := StdMaterialWeighter(WhiteMaterial) - StdMaterialWeighter(BlackMaterial)
 
 	return materialScore
 }
 
-// MaterialWeighter is a helper function to calculate the material weights
-func MaterialWeighter(m map[game.PieceType]int) float32 {
+// StdMaterialWeighter is a helper function to calculate the material weights
+func StdMaterialWeighter(m map[game.PieceType]int) float32 {
 	weights := map[game.PieceType]float32{
 		game.Pawn:   1,
 		game.Knight: 3,

@@ -24,7 +24,7 @@ func main() {
 	}
 
 	m2 := &players.AlphaBetaPlayer{
-		Ev:        evaluators.SecondEvaluator{},
+		Ev:        evaluators.ThirdEvaluator{},
 		MaxDepth:  5,
 		NodeCount: 0,
 	}

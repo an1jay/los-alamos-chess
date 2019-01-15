@@ -16,7 +16,7 @@ func (b SecondEvaluator) Evaluate(pos *game.Position) float32 {
 	WhiteMaterial := pos.Bd.MaterialCount(game.White)
 	BlackMaterial := pos.Bd.MaterialCount(game.Black)
 
-	materialScore := MaterialWeighter(WhiteMaterial) - MaterialWeighter(BlackMaterial)
+	materialScore := StdMaterialWeighter(WhiteMaterial) - StdMaterialWeighter(BlackMaterial)
 
 	backUpTurn := pos.Turn
 
@@ -30,5 +30,5 @@ func (b SecondEvaluator) Evaluate(pos *game.Position) float32 {
 
 	legalMoveScore := WhiteLegalMoves - BlackLegalMoves
 
-	return materialScore + 0.05*legalMoveScore
+	return (materialScore) + 0.15*legalMoveScore
 }

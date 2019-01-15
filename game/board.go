@@ -311,6 +311,18 @@ func (b *Board) SquareAttacked(attackSq Square, attacker Color) bool {
 	return false
 }
 
+// AttackedSquares checks whether a square is attacked by the side attacker
+func (b *Board) AttackedSquares(attacker Color) BitBoard {
+	attackVector := BitBoard(0)
+	pieces := b.PieceOccupancy(attacker)
+	for sq := 0; sq < numSquaresInBoard; sq++ {
+		if pieces.Occupied(Square(sq)) {
+			attackVector = attackVector | b.MovesVector(Square(sq))
+		}
+	}
+	return attackVector
+}
+
 // InCheck checks whether King sq is attacked
 func (b *Board) InCheck(c Color) bool {
 	KingSq := b.KingSquare(c)
