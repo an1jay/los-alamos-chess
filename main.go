@@ -17,9 +17,9 @@ func main() {
 	g := Game{}
 	// g.Play(players.HumanPlayer{}, players.HumanPlayer{}, true)
 
-	m1 := &players.AlphaBetaPlayer{
-		Ev:        evaluators.SecondEvaluator{},
-		MaxDepth:  5,
+	m1 := &players.QuiescencePlayer{
+		Ev:        evaluators.ThirdEvaluator{},
+		MaxDepth:  4,
 		NodeCount: 0,
 	}
 

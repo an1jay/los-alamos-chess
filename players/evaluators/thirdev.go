@@ -16,7 +16,9 @@ func (b ThirdEvaluator) Evaluate(pos *game.Position) float32 {
 	WhiteMaterial := pos.Bd.MaterialCount(game.White)
 	BlackMaterial := pos.Bd.MaterialCount(game.Black)
 
-	materialScore := NewMaterialWeighter(WhiteMaterial) - NewMaterialWeighter(BlackMaterial)
+	whiteMaterialScore := NewMaterialWeighter(WhiteMaterial)
+	blackMaterialScore := NewMaterialWeighter(BlackMaterial)
+	materialScore := whiteMaterialScore - blackMaterialScore
 
 	backUpTurn := pos.Turn
 
@@ -37,8 +39,10 @@ func (b ThirdEvaluator) Evaluate(pos *game.Position) float32 {
 	BlackCentreControl := centreControl(blackAttacks)
 
 	centreControlScore := float32(WhiteCentreControl - BlackCentreControl)
-
-	return (materialScore) + 0.15*legalMoveScore + 0.1*centreControlScore
+	if whiteMaterialScore+blackMaterialScore <= 34 {
+		return materialScore + 0.2*legalMoveScore
+	}
+	return materialScore + 0.15*legalMoveScore + 0.1*centreControlScore
 }
 
 // NewMaterialWeighter is a helper function to calculate the material weights
