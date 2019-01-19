@@ -96,6 +96,8 @@ func ChooseMinimaxAlphaBetaQuiescence(pos *game.Position, ev *Evaluator, minDept
 	return bestMoves, nodeCount
 }
 
+type empty struct{}
+
 // ChooseMinimaxAlphaBetaQuiescenceConcurrently returns a slice of the best moves (according to Minimax with the specified Evaluator)
 func ChooseMinimaxAlphaBetaQuiescenceConcurrently(pos *game.Position, ev *Evaluator, minDepth, maxDepth uint, alpha, beta float32) ([]*game.Ply, uint) {
 	// type empty {}
@@ -116,8 +118,6 @@ func ChooseMinimaxAlphaBetaQuiescenceConcurrently(pos *game.Position, ev *Evalua
 	var bestMoves []*game.Ply
 	var bestScore = DefaultVal * float32(pos.Turn.Other().Coefficient()) // -1000 for pos.Turn = white; 1000 for pos.Turn = black
 
-	type empty struct{}
-
 	var legalMoves = pos.GenerateLegalMoves()
 	var numMoves = len(legalMoves)
 
@@ -136,13 +136,7 @@ func ChooseMinimaxAlphaBetaQuiescenceConcurrently(pos *game.Position, ev *Evalua
 
 		// wg *sync.WaitGroup,
 		// fmt.Println("in for loop")
-		go func(no int, depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, NodeCount *uint, evaluator *Evaluator, alpha, beta float32) {
-			// fmt.Println("in func")
-			sem <- empty{}
-			scoreList[no] = MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount, side, pos, NodeCount, evaluator, alpha, beta)
-			fmt.Println("scoreList", scoreList)
-			// wg.Done()
-		}(num, minDepth, maxDepth, 0, pos.Turn.Other(), newPos, &nodeCount[num], ev, alpha, beta)
+		go asyncSearch(&scoreList[num], &sem, num, minDepth, maxDepth, 0, pos.Turn.Other(), newPos, &nodeCount[num], ev, alpha, beta)
 	}
 	// &wg,
 
@@ -170,4 +164,12 @@ func ChooseMinimaxAlphaBetaQuiescenceConcurrently(pos *game.Position, ev *Evalua
 	fmt.Println("Score List: ", scoreList)
 	fmt.Println("Node Count: ", nodeCount)
 	return bestMoves, sumUintSlice(nodeCount)
+}
+
+func asyncSearch(sclist *float32, sem *chan empty, no int, depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, NodeCount *uint, evaluator *Evaluator, alpha, beta float32) {
+	// fmt.Println("in func")
+	*sem <- empty{}
+	*sclist = MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount, side, pos, NodeCount, evaluator, alpha, beta)
+	fmt.Println("scoreList", *sclist)
+	// wg.Done()
 }
