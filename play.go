@@ -68,7 +68,7 @@ func (g Game) PlayFromPos(white, black Player, verbose bool, posToPlayFrom *game
 		// }
 
 		if verbose {
-			posEv := evaluators.FirstEvaluator{}.Evaluate(pos)
+			posEv := evaluators.MaterialEvaluator{}.Evaluate(pos)
 			g.evList = append(g.evList, posEv)
 			fmt.Printf("Evaluation: %v\n", g.evList)
 		}

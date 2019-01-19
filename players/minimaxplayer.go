@@ -5,12 +5,11 @@ import (
 	"time"
 
 	"github.com/an1jay/los-alamos-chess/game"
-	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
 // MinimaxPlayer plays according to the minimax algorithm
 type MinimaxPlayer struct {
-	Ev        evaluators.Evaluator
+	Ev        Evaluator
 	MaxDepth  uint
 	NodeCount uint
 }

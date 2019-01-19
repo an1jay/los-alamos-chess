@@ -328,3 +328,30 @@ func (b *Board) InCheck(c Color) bool {
 	KingSq := b.KingSquare(c)
 	return b.SquareAttacked(KingSq, c.Other())
 }
+
+// NumAttacksPerSquare returns a map of Squares to the number of attacks the attacker has to that square
+func (b *Board) NumAttacksPerSquare(attacker Color) map[Square]int8 {
+	var maplist []map[Square]bool
+	for _, pt := range AllPieceTypes {
+		bbp := b.BitBoardForPiece(NewPiece(pt, attacker)).Mapping()
+		for sq := 0; sq < NumSquaresInBoard; sq++ {
+			if bbp[Square(sq)] {
+				maplist = append(maplist, b.MovesVector(Square(sq)).Mapping())
+			}
+		}
+	}
+	return countMaps(maplist)
+}
+
+func countMaps(maps []map[Square]bool) map[Square]int8 {
+	var outputmap map[Square]int8
+	for _, m := range maps {
+		for sq, occ := range m {
+			if occ {
+				outputmap[sq]++
+			}
+		}
+
+	}
+	return outputmap
+}
