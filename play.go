@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/an1jay/los-alamos-chess/game"
-	"github.com/an1jay/los-alamos-chess/players/evaluators"
 )
 
 // Player defines a struct with a Move method, which can play Los-Alamos-Chess.
@@ -66,12 +65,6 @@ func (g Game) PlayFromPos(white, black Player, verbose bool, posToPlayFrom *game
 		// if pos.HalfMoveClock == 8 {
 		// 	panic("Test")
 		// }
-
-		if verbose {
-			posEv := evaluators.MaterialEvaluator{}.Evaluate(pos)
-			g.evList = append(g.evList, posEv)
-			fmt.Printf("Evaluation: %v\n", g.evList)
-		}
 
 		// check game over
 		res := pos.Result()
