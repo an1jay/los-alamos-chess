@@ -16,35 +16,34 @@ func main() {
 		MaterialCoeff:      1,
 		LegalMovesCoeff:    0.1,
 		SquareControlCoeff: 0.08,
-		MaterialWeights:    knightrulesweights,
-		WhiteSquareWeights: tightcentrecontrolweights,
-		BlackSquareWeights: tightcentrecontrolweights,
+		MaterialWeights:    pawnrulesweights,
+		WhiteSquareWeights: loosecentrecontrolweights,
+		BlackSquareWeights: loosecentrecontrolweights,
 	}
-
+	_ = ev1
 	ev2 := players.Evaluator{
 		MaterialCoeff:      1,
 		LegalMovesCoeff:    0.1,
-		SquareControlCoeff: 0.08,
+		SquareControlCoeff: 0.05,
 		MaterialWeights:    pawnrulesweights,
-		WhiteSquareWeights: tightcentrecontrolweights,
-		BlackSquareWeights: tightcentrecontrolweights,
+		WhiteSquareWeights: loosecentrecontrolweights,
+		BlackSquareWeights: loosecentrecontrolweights,
 	}
 
-	m1 := &players.QuiescencePlayer{
-		Ev:        ev1,
-		MaxDepth:  4,
-		NodeCount: 0,
+	m1 := &players.Xavier{
+		MinDepth: 5,
+		MaxDepth: 7,
+		Ev:       &ev1,
 	}
 
-	m2 := &players.QuiescencePlayer{
-		Ev:        ev2,
-		MaxDepth:  4,
-		NodeCount: 0,
+	m2 := &players.Xavier{
+		MinDepth: 5,
+		MaxDepth: 7,
+		Ev:       &ev2,
 	}
-	// r := &players.RandomPlayer{}
-	// m1 := &players.HumanPlayer{}
-	b := game.BoardFromMap(NewGame)
-	pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
+	// b := game.BoardFromMap(NewGame)
+	// pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
+	pos := game.NewGamePosition()
 	g.PlayFromPos(m1, m2, true, pos)
 }
 

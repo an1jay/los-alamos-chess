@@ -28,6 +28,17 @@ func (c Color) String() string {
 	return "No Color"
 }
 
+// Coefficient returns 1 for white, -1 for black, 0 for NoColor
+func (c Color) Coefficient() int {
+	switch c {
+	case White:
+		return 1
+	case Black:
+		return -1
+	}
+	return 0
+}
+
 //--------------------------------------------------------------------------------
 
 // Result is one of the 4 Results a game can be in: InPlay, BlackWin, WhiteWin, Draw
