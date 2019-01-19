@@ -406,11 +406,22 @@ var ZobristHashMap = map[Square]map[Piece]uint64{
 	F6: map[Piece]uint64{NoPiece: 15162016773395006737, WhitePawn: 15719567261319496588, WhiteKnight: 10381819373397584044, WhiteRook: 245505232520688868, WhiteQueen: 5096343611318020,
 		WhiteKing: 11130238338614010427, BlackPawn: 6606077363668324549, BlackKnight: 8196222139501837355, BlackRook: 12299368809965038468, BlackQueen: 15805647502848571893, BlackKing: 11719373776528817052}}
 
+var whiteHash uint64 = 13616133844141066041
+var blackHash uint64 = 12360302557774378304
+
 // ZobristHash returns a Zobrist hash of the position using the table
 func (pos *Position) ZobristHash() uint64 {
 	var hash uint64
 	for sq := 0; sq < numSquaresInBoard; sq++ {
 		hash ^= ZobristHashMap[Square(sq)][pos.Bd.Piece(Square(sq))]
 	}
+
+	switch pos.Turn {
+	case White:
+		hash ^= whiteHash
+	case Black:
+		hash ^= blackHash
+	}
+
 	return hash
 }
