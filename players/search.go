@@ -108,13 +108,14 @@ func MinimaxAlphaBetaQuiescence(depth, maxDepth, depthCount uint, side game.Colo
 }
 
 // MinimaxAlphaBetaQuiescenceConcurrently calculates the minimax value for a position
-func MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, NodeCount *uint, evaluator *Evaluator, alpha, beta float32) float32 {
-	(*NodeCount)++
+func MinimaxAlphaBetaQuiescenceConcurrently(prevMove *game.Ply, depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, evaluator *Evaluator, alpha, beta float32) (*game.Ply, float32, uint) {
+	var NodeCount uint
 	// if at a terminal node, evaluate:
 	res := pos.Result()
 	if res != game.InPlay || depth == 0 {
 		ev := evaluator.Evaluate(pos)
-		return ev
+		NodeCount++
+		return prevMove, ev, NodeCount
 	}
 	value := DefaultVal
 
@@ -125,9 +126,9 @@ func MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount uint, si
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
 			if (lgm.Capture || lgm.Promotion != game.NoPieceType) && depthCount < maxDepth {
-				value = max(value, MinimaxAlphaBetaQuiescence(umax(depth-1, 1), maxDepth, depthCount+1, game.Black, newPos, NodeCount, evaluator, alpha, beta))
+				value = max(value, MinimaxAlphaBetaQuiescence(umax(depth-1, 1), maxDepth, depthCount+1, game.Black, newPos, &NodeCount, evaluator, alpha, beta))
 			} else {
-				value = max(value, MinimaxAlphaBetaQuiescence(depth-1, maxDepth, depthCount+1, game.Black, newPos, NodeCount, evaluator, alpha, beta))
+				value = max(value, MinimaxAlphaBetaQuiescence(depth-1, maxDepth, depthCount+1, game.Black, newPos, &NodeCount, evaluator, alpha, beta))
 			}
 			alpha = max(alpha, value)
 			if alpha >= beta {
@@ -140,9 +141,9 @@ func MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount uint, si
 			newPos := pos.Copy()
 			newPos.UnsafeMove(lgm)
 			if lgm.Capture || lgm.Promotion != game.NoPieceType {
-				value = min(value, MinimaxAlphaBetaQuiescence(umax(depth-1, 1), maxDepth, depthCount+1, game.White, newPos, NodeCount, evaluator, alpha, beta))
+				value = min(value, MinimaxAlphaBetaQuiescence(umax(depth-1, 1), maxDepth, depthCount+1, game.White, newPos, &NodeCount, evaluator, alpha, beta))
 			} else {
-				value = min(value, MinimaxAlphaBetaQuiescence(depth-1, maxDepth, depthCount+1, game.White, newPos, NodeCount, evaluator, alpha, beta))
+				value = min(value, MinimaxAlphaBetaQuiescence(depth-1, maxDepth, depthCount+1, game.White, newPos, &NodeCount, evaluator, alpha, beta))
 			}
 			beta = min(beta, value)
 			if alpha >= beta {
@@ -151,5 +152,5 @@ func MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount uint, si
 		}
 	}
 
-	return value
+	return prevMove, value, NodeCount
 }

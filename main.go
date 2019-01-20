@@ -31,14 +31,14 @@ func main() {
 	}
 
 	m1 := &players.Xavier{
-		MinDepth: 10,
-		MaxDepth: 12,
+		MinDepth: 5,
+		MaxDepth: 6,
 		Ev:       &ev1,
 	}
 
 	m2 := &players.Xavier{
-		MinDepth: 10,
-		MaxDepth: 12,
+		MinDepth: 5,
+		MaxDepth: 6,
 		Ev:       &ev2,
 	}
 	// b := game.BoardFromMap(NewGame)
