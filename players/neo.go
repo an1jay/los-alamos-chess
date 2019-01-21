@@ -51,14 +51,14 @@ func (n *Neo) ChooseMove(pos *game.Position) *game.Ply {
 		newPos := pos.Copy()
 		newPos.UnsafeMove(lgm)
 		n.positionQueue <- moveAndPosition{
-			move: lgm,
+			move: *lgm,
 			pos:  newPos,
 		}
 	}
 
 	n.wg.Wait()
 
-	var reorderLegalMoves = make([]*game.Ply, numLegalMoves)
+	var reorderLegalMoves = make([]game.Ply, numLegalMoves)
 	var reorderMoveScores = make([]float32, numLegalMoves)
 	var nodecnt uint
 	var counter int
@@ -77,6 +77,7 @@ func (n *Neo) ChooseMove(pos *game.Position) *game.Ply {
 			reorderLegalMoves[counter] = item.move
 			reorderMoveScores[counter] = item.eval
 			nodecnt += item.nodecnt
+			counter++
 			ok = true
 		default:
 			ok = false
@@ -89,7 +90,7 @@ func (n *Neo) ChooseMove(pos *game.Position) *game.Ply {
 	for i := 0; i < numLegalMoves; i++ {
 		if sideGeqLeq(pos.Turn, reorderMoveScores[i], bestScore) {
 			bestScore = reorderMoveScores[i]
-			bestMove = reorderLegalMoves[i]
+			bestMove = &reorderLegalMoves[i]
 		}
 	}
 
@@ -101,11 +102,15 @@ func (n *Neo) ChooseMove(pos *game.Position) *game.Ply {
 func positionSearcher(in chan moveAndPosition, out chan evaluation, wg *sync.WaitGroup, minDepth, maxDepth uint, ev *Evaluator) {
 	for candidateNode := range in {
 		val, ndct := MinimaxAlphaBetaQuiescenceConcurrently(minDepth, maxDepth, 0, candidateNode.pos.Turn, candidateNode.pos, ev, -1*DefaultVal, DefaultVal)
-		out <- evaluation{
+		message := evaluation{
 			move:    candidateNode.move,
 			nodecnt: ndct,
 			eval:    val,
 		}
+
+		fmt.Println("message: ", message.String())
+		out <- message
+
 		wg.Done()
 	}
 }

@@ -30,9 +30,9 @@ func main() {
 		BlackSquareWeights: loosecentrecontrolweights,
 	}
 
-	m1 := players.CreateNewNeo(4, 5, &ev1, 2)
+	m1 := players.CreateNewNeo(4, 6, &ev1, 4)
 
-	m2 := players.CreateNewNeo(4, 5, &ev2, 2)
+	m2 := players.CreateNewNeo(4, 6, &ev2, 4)
 
 	// b := game.BoardFromMap(NewGame)
 	// pos := game.NewPosition(b, game.White, 0, 0, []uint64{})

@@ -53,16 +53,16 @@ func sumUintSlice(arr []uint) uint {
 }
 
 type evaluation struct {
-	move    *game.Ply
+	move    game.Ply
 	nodecnt uint
 	eval    float32
 }
 
 type moveAndPosition struct {
 	pos  *game.Position
-	move *game.Ply
+	move game.Ply
 }
 
 func (ev evaluation) String() string {
-	return fmt.Sprintf("Move: %s, NodeCount: %d, eval: %.2f", (*ev.move).String(), ev.nodecnt, ev.eval)
+	return fmt.Sprintf("Move: %s, NodeCount: %d, eval: %.2f", (ev.move).String(), ev.nodecnt, ev.eval)
 }
