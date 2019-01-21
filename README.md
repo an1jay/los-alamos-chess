@@ -4,6 +4,8 @@ Chess engine to play Los Alamos Chess
 
 ## Todo List
 
+  - [ ] If there is force checkmate, do it
+  - [ ] Move ordering - put captures and other *a priori* good moves first
   - [ ] Quiescence Search
   - [ ] NegaScout
   - [ ] MTD-f

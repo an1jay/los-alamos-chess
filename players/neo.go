@@ -19,7 +19,7 @@ type Neo struct {
 }
 
 // CreateNewNeo returns a new Neo
-func CreateNewNeo(minDepth uint, maxDepth uint, ev *Evaluator, threadCount int) *Neo {
+func CreateNewNeo(minDepth uint, maxDepth uint, ev *Evaluator, threadCount int, verbose bool) *Neo {
 	var waitg sync.WaitGroup
 
 	NN := &Neo{
@@ -32,7 +32,8 @@ func CreateNewNeo(minDepth uint, maxDepth uint, ev *Evaluator, threadCount int) 
 	}
 
 	for i := 0; i < threadCount; i++ {
-		go positionSearcher(NN.positionQueue, NN.evaluationQueue, NN.wg, NN.MinDepth, NN.MaxDepth, NN.Ev)
+		go positionSearcher(NN.positionQueue, NN.evaluationQueue, NN.wg,
+			NN.MinDepth, NN.MaxDepth, NN.Ev, verbose)
 	}
 
 	return NN
@@ -99,7 +100,8 @@ func (n *Neo) ChooseMove(pos *game.Position) *game.Ply {
 	return bestMove
 }
 
-func positionSearcher(in chan moveAndPosition, out chan evaluation, wg *sync.WaitGroup, minDepth, maxDepth uint, ev *Evaluator) {
+func positionSearcher(in chan moveAndPosition, out chan evaluation, wg *sync.WaitGroup,
+	minDepth, maxDepth uint, ev *Evaluator, verbose bool) {
 	for candidateNode := range in {
 		val, ndct := MinimaxAlphaBetaQuiescenceConcurrently(minDepth, maxDepth, 0, candidateNode.pos.Turn, candidateNode.pos, ev, -1*DefaultVal, DefaultVal)
 		message := evaluation{
@@ -107,8 +109,10 @@ func positionSearcher(in chan moveAndPosition, out chan evaluation, wg *sync.Wai
 			nodecnt: ndct,
 			eval:    val,
 		}
+		if verbose {
+			fmt.Println(message.String())
 
-		fmt.Println("message: ", message.String())
+		}
 		out <- message
 
 		wg.Done()

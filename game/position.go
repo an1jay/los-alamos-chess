@@ -78,12 +78,16 @@ func NewGamePosition() *Position {
 
 // Copy returns a pointer to a copy of this position, with a new copy of Board.
 func (pos *Position) Copy() *Position {
+	newHashList := make([]uint64, len(pos.HashList))
+	copy(newHashList, pos.HashList)
+
 	return &Position{
 		Bd:            pos.Bd.Copy(),
 		Turn:          pos.Turn,
 		MoveNumber:    pos.MoveNumber,
 		HalfMoveClock: pos.HalfMoveClock,
 		InCheck:       pos.InCheck,
+		HashList:      newHashList,
 	}
 }
 
