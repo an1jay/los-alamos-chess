@@ -108,14 +108,14 @@ func MinimaxAlphaBetaQuiescence(depth, maxDepth, depthCount uint, side game.Colo
 }
 
 // MinimaxAlphaBetaQuiescenceConcurrently calculates the minimax value for a position
-func MinimaxAlphaBetaQuiescenceConcurrently(prevMove *game.Ply, depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, evaluator *Evaluator, alpha, beta float32) (*game.Ply, float32, uint) {
+func MinimaxAlphaBetaQuiescenceConcurrently(depth, maxDepth, depthCount uint, side game.Color, pos *game.Position, evaluator *Evaluator, alpha, beta float32) (float32, uint) {
 	var NodeCount uint
 	// if at a terminal node, evaluate:
 	res := pos.Result()
 	if res != game.InPlay || depth == 0 {
 		ev := evaluator.Evaluate(pos)
 		NodeCount++
-		return prevMove, ev, NodeCount
+		return ev, NodeCount
 	}
 	value := DefaultVal
 
@@ -152,5 +152,5 @@ func MinimaxAlphaBetaQuiescenceConcurrently(prevMove *game.Ply, depth, maxDepth,
 		}
 	}
 
-	return prevMove, value, NodeCount
+	return value, NodeCount
 }

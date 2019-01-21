@@ -18,7 +18,7 @@ type Xavier struct {
 func (x *Xavier) ChooseMove(pos *game.Position) *game.Ply {
 	t0 := time.Now()
 	fmt.Println("Xavier thinks...")
-	mv, nodecnt := ChooseMinimaxAlphaBetaQuiescenceConcurrently(pos, x.Ev, x.MinDepth, x.MaxDepth, -1*DefaultVal, DefaultVal)
+	mv, nodecnt := ChooseMinimaxAlphaBetaQuiescence(pos, x.Ev, x.MinDepth, x.MaxDepth, -1*DefaultVal, DefaultVal)
 	dt := time.Since(t0).Seconds()
 	fmt.Printf("Xavier explored %d nodes in %.02f seconds at %.02f nodes/s \n", nodecnt, dt, float64(nodecnt)/dt)
 	return mv[0]

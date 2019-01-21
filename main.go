@@ -30,17 +30,10 @@ func main() {
 		BlackSquareWeights: loosecentrecontrolweights,
 	}
 
-	m1 := &players.Xavier{
-		MinDepth: 5,
-		MaxDepth: 6,
-		Ev:       &ev1,
-	}
+	m1 := players.CreateNewNeo(4, 5, &ev1, 2)
 
-	m2 := &players.Xavier{
-		MinDepth: 5,
-		MaxDepth: 6,
-		Ev:       &ev2,
-	}
+	m2 := players.CreateNewNeo(4, 5, &ev2, 2)
+
 	// b := game.BoardFromMap(NewGame)
 	// pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 	pos := game.NewGamePosition()

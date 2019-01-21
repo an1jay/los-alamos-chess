@@ -1,6 +1,10 @@
 package players
 
-import "github.com/an1jay/los-alamos-chess/game"
+import (
+	"fmt"
+
+	"github.com/an1jay/los-alamos-chess/game"
+)
 
 // DefaultVal is larger than maximum possible evaluation
 const DefaultVal float32 = 1000
@@ -46,4 +50,19 @@ func sumUintSlice(arr []uint) uint {
 		total += num
 	}
 	return total
+}
+
+type evaluation struct {
+	move    *game.Ply
+	nodecnt uint
+	eval    float32
+}
+
+type moveAndPosition struct {
+	pos  *game.Position
+	move *game.Ply
+}
+
+func (ev evaluation) String() string {
+	return fmt.Sprintf("Move: %s, NodeCount: %d, eval: %.2f", (*ev.move).String(), ev.nodecnt, ev.eval)
 }
