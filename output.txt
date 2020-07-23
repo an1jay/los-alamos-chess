@@ -1,0 +1,280 @@
+   A B C D E F
+6. r n q k n r
+5. ℼ ℼ ℼ ℼ ℼ ℼ
+4. _ _ _ _ _ _
+3. _ _ _ _ _ _
+2. P P P P P P
+1. R N Q K N R
+White is to move. White is not in check
+Neo thinks...
+Move: b1-a3=, NodeCount: 3372, eval: -0.30
+Move: a2-a3=, NodeCount: 5078, eval: 0.20
+Move: b2-b3=, NodeCount: 8066, eval: 0.40
+Move: b1-c3=, NodeCount: 9620, eval: -0.30
+Move: e1-f3=, NodeCount: 10408, eval: -0.10
+Move: d2-d3=, NodeCount: 5971, eval: 0.20
+Move: e1-d3=, NodeCount: 13102, eval: -0.20
+Move: f2-f3=, NodeCount: 4221, eval: 0.10
+Move: e2-e3=, NodeCount: 5949, eval: 0.00
+Move: c2-c3=, NodeCount: 12161, eval: 0.50
+Neo explored 77948 nodes in 0.62 seconds at 126428.97 nodes/s 
+White plays c2-c3=
+
+   A B C D E F
+6. r n q k n r
+5. ℼ ℼ ℼ ℼ ℼ ℼ
+4. _ _ _ _ _ _
+3. _ _ P _ _ _
+2. P P _ P P P
+1. R N Q K N R
+Black is to move. Black is not in check
+Neo thinks...
+Move: f5-f4=, NodeCount: 22077, eval: 0.20
+Move: c5-c4=, NodeCount: 24453, eval: -0.10
+Move: a5-a4=, NodeCount: 31558, eval: 0.20
+Move: d5-d4=, NodeCount: 34976, eval: 0.30
+Move: e5-e4=, NodeCount: 46330, eval: 0.40
+Move: b6-c4=, NodeCount: 21985, eval: 0.50
+Move: b6-a4=, NodeCount: 28430, eval: 0.40
+Move: e6-d4=, NodeCount: 24725, eval: 1.90
+Move: b5-b4=, NodeCount: 67256, eval: 0.40
+Move: e6-f4=, NodeCount: 33949, eval: 0.20
+Neo explored 335739 nodes in 2.82 seconds at 118866.72 nodes/s 
+Black plays c5-c4=
+
+   A B C D E F
+6. r n q k n r
+5. ℼ ℼ _ ℼ ℼ ℼ
+4. _ _ ℼ _ _ _
+3. _ _ P _ _ _
+2. P P _ P P P
+1. R N Q K N R
+White is to move. White is not in check
+Neo thinks...
+Move: e1-d3=, NodeCount: 6305, eval: -1.80
+Move: d1-c2=, NodeCount: 7103, eval: 0.10
+Move: a2-a3=, NodeCount: 11270, eval: -0.10
+Move: e1-f3=, NodeCount: 18686, eval: -0.10
+Move: e1-c2=, NodeCount: 19263, eval: 0.10
+Move: b1-a3=, NodeCount: 20898, eval: 0.30
+Move: c1-c2=, NodeCount: 26343, eval: 0.30
+Move: e2-e3=, NodeCount: 12165, eval: 0.10
+Move: f2-f3=, NodeCount: 11281, eval: 0.00
+Move: d2-d3=, NodeCount: 12467, eval: -0.10
+Move: b2-b3=, NodeCount: 25458, eval: -0.20
+Neo explored 171239 nodes in 1.37 seconds at 124553.56 nodes/s 
+White plays c1-c2=
+
+   A B C D E F
+6. r n q k n r
+5. ℼ ℼ _ ℼ ℼ ℼ
+4. _ _ ℼ _ _ _
+3. _ _ P _ _ _
+2. P P Q P P P
+1. R N _ K N R
+Black is to move. Black is not in check
+Neo thinks...
+Move: b6-a4=, NodeCount: 53506, eval: -0.20
+Move: f5-f4=, NodeCount: 69897, eval: 0.20
+Move: a5-a4=, NodeCount: 92729, eval: 0.30
+Move: e5-e4=, NodeCount: 93673, eval: 0.20
+Move: e6-d4=, NodeCount: 43720, eval: 2.10
+Move: d6-c5=, NodeCount: 78957, eval: 0.20
+Move: b5-b4=, NodeCount: 198963, eval: 0.50
+Move: c6-c5=, NodeCount: 144224, eval: 0.00
+Move: d5-d4=, NodeCount: 199216, eval: 0.30
+Move: e6-c5=, NodeCount: 76677, eval: -0.10
+Move: e6-f4=, NodeCount: 117907, eval: 0.50
+Neo explored 1169469 nodes in 8.73 seconds at 134006.47 nodes/s 
+Black plays b6-a4=
+
+   A B C D E F
+6. r _ q k n r
+5. ℼ ℼ _ ℼ ℼ ℼ
+4. n _ ℼ _ _ _
+3. _ _ P _ _ _
+2. P P Q P P P
+1. R N _ K N R
+White is to move. White is not in check
+Neo thinks...
+Move: e1-d3=, NodeCount: 28090, eval: -1.70
+Move: a2-a3=, NodeCount: 31360, eval: -0.30
+Move: c2-b3=, NodeCount: 11679, eval: -5.20
+Move: c2-c1=, NodeCount: 16874, eval: -0.20
+Move: c2xa4=, NodeCount: 2091, eval: -2.40
+Move: d1-c1=, NodeCount: 47390, eval: -0.10
+Move: c2-d3=, NodeCount: 9996, eval: -4.60
+Move: c2-e4=, NodeCount: 6254, eval: -5.50
+Move: c2xf5=, NodeCount: 9153, eval: -4.50
+Move: b1-a3=, NodeCount: 75620, eval: 0.30
+Move: e1-f3=, NodeCount: 84410, eval: 0.00
+Move: e2-e3=, NodeCount: 37710, eval: 0.30
+Move: f2-f3=, NodeCount: 35266, eval: 0.00
+Move: d2-d3=, NodeCount: 51777, eval: -0.10
+Move: b2-b3=, NodeCount: 104053, eval: 0.20
+Neo explored 551723 nodes in 4.46 seconds at 123756.10 nodes/s 
+White plays e2-e3=
+
+   A B C D E F
+6. r _ q k n r
+5. ℼ ℼ _ ℼ ℼ ℼ
+4. n _ ℼ _ _ _
+3. _ _ P _ P _
+2. P P Q P _ P
+1. R N _ K N R
+Black is to move. Black is not in check
+Neo thinks...
+Move: a4xb2=, NodeCount: 6880, eval: 1.70
+Move: a4xc3=, NodeCount: 15836, eval: 2.00
+Move: a4-c5=, NodeCount: 69495, eval: -0.10
+Move: e5-e4=, NodeCount: 73743, eval: 0.10
+Move: a4-b6=, NodeCount: 89582, eval: 0.30
+Move: a6-b6=, NodeCount: 49055, eval: 0.10
+Move: d6-c5=, NodeCount: 51453, eval: 0.30
+Move: f5-f4=, NodeCount: 161147, eval: -0.10
+Move: c6-b6=, NodeCount: 89407, eval: -0.10
+Move: c6-c5=, NodeCount: 131855, eval: 0.00
+Move: d5-d4=, NodeCount: 226186, eval: 0.00
+Move: b5-b4=, NodeCount: 254438, eval: 0.60
+Move: e6-f4=, NodeCount: 81805, eval: 1.50
+Move: e6-c5=, NodeCount: 86389, eval: -0.30
+Move: e6-d4=, NodeCount: 112655, eval: 2.50
+Neo explored 1499926 nodes in 11.86 seconds at 126509.31 nodes/s 
+Black plays e6-c5=
+
+   A B C D E F
+6. r _ q k _ r
+5. ℼ ℼ n ℼ ℼ ℼ
+4. n _ ℼ _ _ _
+3. _ _ P _ P _
+2. P P Q P _ P
+1. R N _ K N R
+White is to move. White is not in check
+Neo thinks...
+Move: e1-d3=, NodeCount: 7127, eval: -3.00
+Move: a2-a3=, NodeCount: 23600, eval: -0.60
+Move: d1-e2=, NodeCount: 35828, eval: 0.10
+Move: e1-f3=, NodeCount: 47811, eval: -0.40
+Move: c2-d3=, NodeCount: 2416, eval: -6.10
+Move: c2-c1=, NodeCount: 26578, eval: -0.40
+Move: c2-b3=, NodeCount: 16344, eval: -5.30
+Move: c2xa4=, NodeCount: 3204, eval: -2.60
+Move: c2-e4=, NodeCount: 7621, eval: -5.50
+Move: c2xf5=, NodeCount: 9648, eval: -4.50
+Move: d2-d3=, NodeCount: 15939, eval: -0.40
+Move: d1-c1=, NodeCount: 69224, eval: -0.10
+Move: b1-a3=, NodeCount: 70120, eval: 0.10
+Move: f2-f3=, NodeCount: 41866, eval: 0.30
+Move: b2-b3=, NodeCount: 93135, eval: 0.20
+Move: e3-e4=, NodeCount: 120871, eval: -1.00
+Neo explored 591332 nodes in 7.43 seconds at 79598.17 nodes/s 
+White plays f2-f3=
+
+   A B C D E F
+6. r _ q k _ r
+5. ℼ ℼ n ℼ ℼ ℼ
+4. n _ ℼ _ _ _
+3. _ _ P _ P P
+2. P P Q P _ _
+1. R N _ K N R
+Black is to move. Black is not in check
+Neo thinks...
+Move: a4xb2=, NodeCount: 5394, eval: 1.30
+Move: a4xc3=, NodeCount: 17403, eval: 1.60
+Move: c5-b3=, NodeCount: 23563, eval: 2.00
+Move: c5-d3=, NodeCount: 46868, eval: 0.30
+Move: c5-e6=, NodeCount: 70066, eval: 0.00
+Move: c5-e4=, NodeCount: 100326, eval: 1.80
+Move: a4-b6=, NodeCount: 111248, eval: 0.00
+Move: e5-e4=, NodeCount: 109444, eval: -0.20
+Move: f5-f4=, NodeCount: 139198, eval: -0.20
+Move: c6-b6=, NodeCount: 118475, eval: 0.00
+Move: d5-d4=, NodeCount: 208570, eval: 0.00
+Move: b5-b4=, NodeCount: 241268, eval: 0.30
+Move: d6-e6=, NodeCount: 99595, eval: 0.00
+Move: a6-b6=, NodeCount: 159974, eval: 0.00
+Move: f6-e6=, NodeCount: 131254, eval: 0.00
+Neo explored 1582646 nodes in 15.17 seconds at 104350.60 nodes/s 
+Black plays f5-f4=
+
+   A B C D E F
+6. r _ q k _ r
+5. ℼ ℼ n ℼ ℼ _
+4. n _ ℼ _ _ ℼ
+3. _ _ P _ P P
+2. P P Q P _ _
+1. R N _ K N R
+White is to move. White is not in check
+Neo thinks...
+Move: e1-d3=, NodeCount: 18371, eval: -3.40
+Move: a2-a3=, NodeCount: 57284, eval: -0.70
+Move: d1-e2=, NodeCount: 116838, eval: 0.20
+Move: c2-c1=, NodeCount: 62376, eval: -0.50
+Move: c2-d3=, NodeCount: 3884, eval: -6.10
+Move: c2xa4=, NodeCount: 15865, eval: -2.90
+Move: f1-f2=, NodeCount: 152795, eval: 0.10
+Move: c2-b3=, NodeCount: 37689, eval: -5.30
+Move: d1-c1=, NodeCount: 170890, eval: 0.00
+Move: c2-f5=, NodeCount: 23277, eval: -5.60
+Move: c2-e4=, NodeCount: 37264, eval: -5.60
+Move: b1-a3=, NodeCount: 178494, eval: 0.50
+Move: d2-d3=, NodeCount: 40096, eval: -0.70
+Move: e3xf4=, NodeCount: 63474, eval: 0.30
+Move: e3-e4=, NodeCount: 78005, eval: -1.00
+Move: b2-b3=, NodeCount: 241708, eval: 0.50
+Neo explored 1298310 nodes in 11.29 seconds at 115042.59 nodes/s 
+White plays b2-b3=
+
+   A B C D E F
+6. r _ q k _ r
+5. ℼ ℼ n ℼ ℼ _
+4. n _ ℼ _ _ ℼ
+3. _ P P _ P P
+2. P _ Q P _ _
+1. R N _ K N R
+Black is to move. Black is not in check
+Neo thinks...
+Move: a4-b2=, NodeCount: 61284, eval: 2.40
+Move: a4xc3=, NodeCount: 106471, eval: 1.60
+Move: c5xb3=, NodeCount: 52574, eval: 1.10
+Move: c4xb3=, NodeCount: 193692, eval: 0.50
+Move: f4xe3=, NodeCount: 197620, eval: 1.30
+Move: c5-d3=, NodeCount: 169515, eval: 1.90
+Move: c5-e6=, NodeCount: 240058, eval: 2.00
+Move: b5-b4=, NodeCount: 465562, eval: 1.70
+Move: a4-b6=, NodeCount: 492197, eval: -0.10
+Move: a6-b6=, NodeCount: 142683, eval: 1.40
+Move: c5-e4=, NodeCount: 478642, eval: 2.40
+Move: c6-b6=, NodeCount: 137298, eval: 1.10
+Move: d6-e6=, NodeCount: 195120, eval: 1.60
+Move: e5-e4=, NodeCount: 404507, eval: 1.90
+Move: d5-d4=, NodeCount: 467654, eval: 1.70
+Move: f6-f5=, NodeCount: 187892, eval: 3.10
+Move: f6-e6=, NodeCount: 190923, eval: 2.00
+Neo explored 4183692 nodes in 33.71 seconds at 124110.05 nodes/s 
+Black plays a4-b6=
+
+   A B C D E F
+6. r n q k _ r
+5. ℼ ℼ n ℼ ℼ _
+4. _ _ ℼ _ _ ℼ
+3. _ P P _ P P
+2. P _ Q P _ _
+1. R N _ K N R
+White is to move. White is not in check
+Neo thinks...
+Move: a2-a3=, NodeCount: 16906, eval: -1.20
+Move: c2-c1=, NodeCount: 38318, eval: -0.60
+Move: e1-d3=, NodeCount: 106198, eval: -2.70
+Move: d1-c1=, NodeCount: 133523, eval: 0.00
+Move: d1-e2=, NodeCount: 153502, eval: 0.00
+Move: c2-d3=, NodeCount: 103954, eval: -5.30
+Move: b1-a3=, NodeCount: 204968, eval: 0.20
+Move: c2-b2=, NodeCount: 169241, eval: 0.20
+Move: f1-f2=, NodeCount: 241570, eval: 0.10
+Move: d2-d3=, NodeCount: 38985, eval: -0.60
+Move: b3xc4=, NodeCount: 62742, eval: -0.20
+Move: e3-e4=, NodeCount: 77015, eval: -0.70
+Move: e3xf4=, NodeCount: 111744, eval: 0.10
+Move: c2-e4=, NodeCount: 385347, eval: -5.10
+Move: b3-b4=, NodeCount: 361369, eval: 0.50

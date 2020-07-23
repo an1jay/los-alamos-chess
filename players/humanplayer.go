@@ -10,7 +10,7 @@ import (
 type HumanPlayer struct{}
 
 // ChooseMove asks for a legal move through stdout/stdin
-func (h *HumanPlayer) ChooseMove(pos *game.Position) *game.Ply {
+func (h HumanPlayer) ChooseMove(pos *game.Position) *game.Ply {
 	fmt.Println("Legal Moves: ", pos.GenerateLegalMoves())
 	p := &game.Ply{}
 	for true {

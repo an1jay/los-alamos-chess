@@ -30,14 +30,23 @@ func main() {
 		BlackSquareWeights: loosecentrecontrolweights,
 	}
 
-	m1 := players.CreateNewNeo(4, 8, &ev1, 6)
+	m1 := players.CreateNewNeo(5, 8, &ev2, 6, true)
 
-	m2 := players.CreateNewNeo(4, 8, &ev2, 6)
+	// m2 := players.CreateNewNeo(5, 8, &ev2, 6, true)
+	m2 := players.HumanPlayer{}
 
 	// b := game.BoardFromMap(NewGame)
 	// pos := game.NewPosition(b, game.White, 0, 0, []uint64{})
 	pos := game.NewGamePosition()
-	g.PlayFromPos(m1, m2, true, pos)
+	// pos2 := game.Position{
+	// 	Bd:            game.BoardFromMap(KNPawnOpening),
+	// 	Turn:          game.Black,
+	// 	MoveNumber:    0,
+	// 	HalfMoveClock: 0,
+	// 	InCheck:       false,
+	// 	HashList:      []uint64{},
+	// }
+	g.PlayFromPos(m2, m1, true, pos)
 }
 
 var standardmaterialweights = map[game.PieceType]float32{

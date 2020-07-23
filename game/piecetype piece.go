@@ -217,7 +217,7 @@ var (
 
 	// PieceCharMap is a mapping from Pieces to their FEN characters (e.g. White Rook = 'R').
 	PieceCharMap = map[Piece]string{
-		NoPiece: "_",
+		NoPiece: " ",
 
 		WhitePawn:   "P",
 		WhiteKnight: "N",

@@ -65,13 +65,20 @@ func (b *Board) SquareDisplay() {
 // FuncDisplay outputs a string representation given by function f to stdout
 func (b *Board) FuncDisplay(f func(Square) string) {
 	fmt.Printf(
-		"   A B C D E F\n"+
-			"6. %s %s %s %s %s %s\n"+
-			"5. %s %s %s %s %s %s\n"+
-			"4. %s %s %s %s %s %s\n"+
-			"3. %s %s %s %s %s %s\n"+
-			"2. %s %s %s %s %s %s\n"+
-			"1. %s %s %s %s %s %s\n",
+		" -+---+---+---+---+---+---+\n"+
+			"6 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"5 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"4 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"3 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"2 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"1 | %s | %s | %s | %s | %s | %s |\n"+
+			" -+---+---+---+---+---+---+\n"+
+			"    A   B   C   D   E   F\n",
 		f(A6), f(B6), f(C6), f(D6), f(E6), f(F6),
 		f(A5), f(B5), f(C5), f(D5), f(E5), f(F5),
 		f(A4), f(B4), f(C4), f(D4), f(E4), f(F4),
